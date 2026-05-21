@@ -1,6 +1,6 @@
-# my-claude-code-plugins
+# MYCP
 
-ryangowe's personal [Claude Code](https://code.claude.com/docs) plugin marketplace.
+my personal [Claude Code](https://code.claude.com/docs) plugin marketplace.
 
 ## Use it
 
