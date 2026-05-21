@@ -16,3 +16,11 @@ repos:
     rev: v0.21.0
     hooks:
       - id: yamlfmt
+  - repo: https://github.com/hukkin/mdformat
+    rev: 1.0.0
+    hooks:
+      - id: mdformat
+        args: [--number]
+        additional_dependencies:
+          - mdformat-gfm==1.0.0
+          - mdformat-frontmatter==2.0.10

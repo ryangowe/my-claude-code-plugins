@@ -5,12 +5,12 @@ major plugin component so you can copy it as a starting template.
 
 ## What's inside
 
-| Path | Component | What it does |
-| ---- | --------- | ------------ |
-| `commands/hello.md` | Slash command | `/hello-world:hello [name]` — greets a person (or the world). |
-| `agents/greeter.md` | Subagent | `greeter` — drafts warm welcome messages. |
-| `skills/greeting/SKILL.md` | Skill | `greeting` — composes context-aware salutations. |
-| `hooks/hooks.json` | Hook | Prints `[hello-world] plugin loaded` on session start. |
+| Path                       | Component     | What it does                                                  |
+| -------------------------- | ------------- | ------------------------------------------------------------- |
+| `commands/hello.md`        | Slash command | `/hello-world:hello [name]` — greets a person (or the world). |
+| `agents/greeter.md`        | Subagent      | `greeter` — drafts warm welcome messages.                     |
+| `skills/greeting/SKILL.md` | Skill         | `greeting` — composes context-aware salutations.              |
+| `hooks/hooks.json`         | Hook          | Prints `[hello-world] plugin loaded` on session start.        |
 
 ## Try it
 
