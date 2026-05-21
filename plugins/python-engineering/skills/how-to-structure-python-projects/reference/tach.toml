@@ -1,0 +1,41 @@
+# tach.toml — enforces the sub_package DAG and sub_module visibility.
+# Place at the repo root. Run `tach check` in CI / pre-commit.
+# Docs: https://docs.gauge.sh
+#
+# The comments below are teaching notes for this reference. Do NOT copy them
+# into a real project's tach.toml — keep only the config that applies.
+
+source_roots = ["src"]
+exclude = ["**/__pycache__"]
+
+# Reject any cycle among sub_packages outright.
+forbid_circular_dependencies = true
+
+# --- Sub_package dependency DAG ------------------------------------------
+# One [[modules]] entry per sub_package. `depends_on` is an allow-list: it
+# names every other sub_package this one may import. A cross-package import
+# that isn't listed fails `tach check` — a missing declaration fails loudly
+# instead of silently permitting drift. Declare every sub_package here.
+
+[[modules]]
+path = "my_project.common"
+depends_on = []                                   # leaf — depends on nothing
+
+[[modules]]
+path = "my_project.billing"
+depends_on = ["my_project.common"]
+
+[[modules]]
+path = "my_project.orders"
+depends_on = ["my_project.billing", "my_project.common"]
+
+# --- Sub_module visibility -----------------------------------------------
+# This single interface applies to every sub_package (the `from` regex).
+# `expose` admits only members whose name does NOT start with `_`, so a
+# `_private` sub_module — or a `_private` symbol — cannot be imported across
+# a sub_package boundary. Intra-package imports are unaffected. The `_`
+# naming convention becomes machine-enforced, with no per-sub_package upkeep.
+
+[[interfaces]]
+from = ["my_project\\..*"]
+expose = ["[^_].*"]

@@ -19,6 +19,22 @@
         "starter",
         "template"
       ]
+    },
+    {
+      "name": "python-engineering",
+      "source": "./plugins/python-engineering",
+      "description": "Opinionated Python engineering knowledge base -- how-to skills plus a change-reviewer agent.",
+      "version": "0.1.0",
+      "author": {
+        "name": "ryangowe"
+      },
+      "category": "knowledge",
+      "keywords": [
+        "python",
+        "style",
+        "best-practices",
+        "knowledge-base"
+      ]
     }
   ]
 }
