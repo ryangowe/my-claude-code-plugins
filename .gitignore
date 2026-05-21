@@ -99,3 +99,6 @@ htmlcov/
 
 # pyenv
 # .python-version
+
+### Local working files
+CLAUDE.md
