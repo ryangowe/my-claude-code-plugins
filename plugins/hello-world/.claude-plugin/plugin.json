@@ -1,0 +1,13 @@
+{
+  "name": "hello-world",
+  "description": "Example plugin demonstrating commands, agents, skills, and hooks. Copy it as a template for new plugins.",
+  "version": "0.1.0",
+  "author": {
+    "name": "ryangowe"
+  },
+  "keywords": [
+    "example",
+    "starter",
+    "template"
+  ]
+}
