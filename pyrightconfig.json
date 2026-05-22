@@ -1,0 +1,12 @@
+{
+  "include": ["plugins/anti-cheat/scripts"],
+  "extraPaths": ["plugins/anti-cheat/scripts"],
+  "venvPath": "plugins/anti-cheat",
+  "venv": ".venv",
+  "executionEnvironments": [
+    {
+      "root": "plugins/anti-cheat/scripts",
+      "extraPaths": ["plugins/anti-cheat/scripts"]
+    }
+  ]
+}

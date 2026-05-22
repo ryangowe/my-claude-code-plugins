@@ -24,3 +24,12 @@ repos:
         additional_dependencies:
           - mdformat-gfm==1.0.0
           - mdformat-frontmatter==2.0.10
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        entry: pytest plugins
+        language: python
+        additional_dependencies: [pytest>=8]
+        pass_filenames: false
+        files: \.py$

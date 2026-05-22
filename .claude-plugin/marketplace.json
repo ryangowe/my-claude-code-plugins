@@ -12,6 +12,10 @@
     {
       "name": "python-engineering",
       "source": "./plugins/python-engineering"
+    },
+    {
+      "name": "anti-cheat",
+      "source": "./plugins/anti-cheat"
     }
   ]
 }

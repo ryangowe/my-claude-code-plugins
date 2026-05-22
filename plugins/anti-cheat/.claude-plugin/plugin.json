@@ -1,0 +1,13 @@
+{
+  "name": "anti-cheat",
+  "description": "Catches Claude cutting corners. First hook verifies the URL citations in the final message are reachable.",
+  "author": {
+    "name": "ryangowe"
+  },
+  "keywords": [
+    "anti-cheat",
+    "verification",
+    "url",
+    "hooks"
+  ]
+}
