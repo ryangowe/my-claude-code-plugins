@@ -7,34 +7,11 @@
   "plugins": [
     {
       "name": "hello-world",
-      "source": "./plugins/hello-world",
-      "description": "Example plugin demonstrating commands, agents, skills, and hooks. Copy it as a template for new plugins.",
-      "version": "0.1.0",
-      "author": {
-        "name": "ryangowe"
-      },
-      "category": "examples",
-      "keywords": [
-        "example",
-        "starter",
-        "template"
-      ]
+      "source": "./plugins/hello-world"
     },
     {
       "name": "python-engineering",
-      "source": "./plugins/python-engineering",
-      "description": "Opinionated Python engineering knowledge base -- how-to skills plus a change-reviewer agent.",
-      "version": "0.1.0",
-      "author": {
-        "name": "ryangowe"
-      },
-      "category": "knowledge",
-      "keywords": [
-        "python",
-        "style",
-        "best-practices",
-        "knowledge-base"
-      ]
+      "source": "./plugins/python-engineering"
     }
   ]
 }

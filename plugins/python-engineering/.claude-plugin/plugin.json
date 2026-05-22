@@ -1,7 +1,6 @@
 {
   "name": "python-engineering",
   "description": "Opinionated Python engineering knowledge base -- how-to skills plus a change-reviewer agent.",
-  "version": "0.1.0",
   "author": {
     "name": "ryangowe"
   },
