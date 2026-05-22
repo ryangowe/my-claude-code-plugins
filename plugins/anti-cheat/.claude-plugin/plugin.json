@@ -1,6 +1,6 @@
 {
   "name": "anti-cheat",
-  "description": "Catches Claude cutting corners. First hook verifies the URL citations in the final message are reachable.",
+  "description": "Catches Claude cutting corners. Hooks: (1) verify URL citations are reachable, (2) detect hedging patterns that signal hallucination.",
   "author": {
     "name": "ryangowe"
   },
