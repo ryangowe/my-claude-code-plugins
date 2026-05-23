@@ -30,6 +30,6 @@ repos:
         name: pytest
         entry: pytest plugins
         language: python
-        additional_dependencies: [pytest>=8]
+        additional_dependencies: [pytest>=8, jieba]
         pass_filenames: false
         files: \.py$
