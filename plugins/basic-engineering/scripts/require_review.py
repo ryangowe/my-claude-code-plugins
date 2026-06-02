@@ -1,20 +1,32 @@
-"""Stop hook: block when Python files were edited but the reviewer was not spawned."""
+"""Stop hook: block when code files were edited but no reviewer agent was spawned."""
 
 import json
 import sys
 from pathlib import Path
 
 _EDIT_TOOLS = frozenset({"Edit", "Write"})
-_REVIEWER_AGENT = "python-change-reviewer"
+
+# Source-code suffixes (allowlist). Editing docs/config/data does not gate.
+_CODE_SUFFIXES = frozenset(
+    {
+        ".py", ".pyi",
+        ".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx",
+        ".go", ".rs", ".java", ".kt", ".kts", ".scala",
+        ".c", ".h", ".cc", ".cpp", ".cxx", ".hpp", ".hh",
+        ".cs", ".rb", ".php", ".swift", ".m", ".mm",
+        ".lua", ".r", ".jl", ".dart", ".ex", ".exs", ".erl", ".hs",
+        ".sh", ".bash", ".zsh", ".sql", ".vue", ".svelte",
+    }
+)
 
 
 def check(transcript_path: str) -> dict:
-    """Return edited .py files and whether the reviewer ran this turn."""
+    """Return edited code files and whether any reviewer ran this turn."""
     entries = _load_transcript(transcript_path)
     turn = _current_turn(entries)
-    py_files = _edited_py_files(turn)
+    code_files = _edited_code_files(turn)
     reviewed = _reviewer_spawned(turn)
-    return {"py_files": sorted(py_files), "reviewed": reviewed}
+    return {"code_files": sorted(code_files), "reviewed": reviewed}
 
 
 def _load_transcript(path: str) -> list[dict]:
@@ -41,8 +53,8 @@ def _current_turn(entries: list[dict]) -> list[dict]:
     return turn
 
 
-def _edited_py_files(turn: list[dict]) -> set[str]:
-    """Collect .py file paths touched by Edit/Write in this turn."""
+def _edited_code_files(turn: list[dict]) -> set[str]:
+    """Collect code file paths touched by Edit/Write in this turn."""
     paths: set[str] = set()
     for entry in turn:
         if entry.get("type") != "assistant":
@@ -53,13 +65,13 @@ def _edited_py_files(turn: list[dict]) -> set[str]:
             if block.get("name") not in _EDIT_TOOLS:
                 continue
             file_path = (block.get("input") or {}).get("file_path", "")
-            if file_path.endswith(".py"):
+            if Path(file_path).suffix.lower() in _CODE_SUFFIXES:
                 paths.add(file_path)
     return paths
 
 
 def _reviewer_spawned(turn: list[dict]) -> bool:
-    """True if the python-change-reviewer agent was spawned this turn."""
+    """True if any *-reviewer agent was spawned this turn (any one passes)."""
     for entry in turn:
         if entry.get("type") != "assistant":
             continue
@@ -67,19 +79,21 @@ def _reviewer_spawned(turn: list[dict]) -> bool:
             if block.get("type") != "tool_use" or block.get("name") != "Agent":
                 continue
             agent_type = (block.get("input") or {}).get("subagent_type", "")
-            if _REVIEWER_AGENT in agent_type:
+            if agent_type.endswith("-reviewer"):
                 return True
     return False
 
 
 def _block_decision(result: dict) -> dict | None:
-    if not result["py_files"] or result["reviewed"]:
+    if not result["code_files"] or result["reviewed"]:
         return None
-    listed = "\n".join(f"  - {p}" for p in result["py_files"])
+    listed = "\n".join(f"  - {p}" for p in result["code_files"])
     reason = (
-        f"You edited Python files but did not run the python-change-reviewer:\n{listed}\n"
-        "Spawn the python-engineering:python-change-reviewer agent now to review "
-        "these changes before responding to the user."
+        f"You edited code but ran no reviewer:\n{listed}\n"
+        "Before responding, review what you wrote: spawn the appropriate *-reviewer "
+        "agent(s) for the changes (eg. craft-reviewer, comment-reviewer, change-reviewer). "
+        "For large or wide-ranging changes, invoke the basic-engineering:review-board skill "
+        "instead -- it fans out to every reviewer. Running any one reviewer satisfies this check."
     )
     return {"decision": "block", "reason": reason}
 

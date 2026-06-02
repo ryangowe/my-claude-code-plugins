@@ -1,6 +1,6 @@
 {
   "name": "python-engineering",
-  "description": "Opinionated Python engineering knowledge base -- how-to skills plus a change-reviewer agent.",
+  "description": "Opinionated Python engineering knowledge base -- Python how-to skills layered on basic-engineering.",
   "author": {
     "name": "ryangowe"
   },
@@ -9,6 +9,9 @@
     "style",
     "best-practices",
     "knowledge-base"
+  ],
+  "dependencies": [
+    "basic-engineering"
   ],
   "mcpServers": {
     "context7": {
