@@ -16,6 +16,10 @@
     {
       "name": "anti-cheat",
       "source": "./plugins/anti-cheat"
+    },
+    {
+      "name": "basic-engineering",
+      "source": "./plugins/basic-engineering"
     }
   ]
 }

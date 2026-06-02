@@ -1,0 +1,23 @@
+{
+  "name": "basic-engineering",
+  "description": "Opinionated language-agnostic engineering knowledge base -- foundational how-to skills.",
+  "author": {
+    "name": "ryangowe"
+  },
+  "keywords": [
+    "engineering",
+    "style",
+    "best-practices",
+    "knowledge-base"
+  ],
+  "mcpServers": {
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "grep": {
+      "type": "http",
+      "url": "https://mcp.grep.app"
+    }
+  }
+}
