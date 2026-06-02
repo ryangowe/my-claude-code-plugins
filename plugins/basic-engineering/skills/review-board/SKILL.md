@@ -7,7 +7,7 @@ description: Review the current change by fanning out to every available *-revie
 
 对当前改动做一次审查。本 skill 是入口编排: 并行调用所有可用的 `*-reviewer` subagent,再汇总它们的结果。
 
-reviewer 名单不写死。凡名字以 `-reviewer` 结尾、当前可用的 subagent 全部纳入。basic-engineering 自带 `craft-reviewer`、`comment-reviewer`、`change-reviewer`;其它已安装插件加入的 `*-reviewer`(如某语言知识库的 reviewer)同样自动纳入。
+reviewer 名单不写死。凡名字以 `-reviewer` 结尾、当前可用的 subagent 全部纳入。basic-engineering 自带 `craft-reviewer`、`comment-reviewer`、`change-reviewer`、`structure-reviewer`;其它已安装插件加入的 `*-reviewer`(如某语言知识库的 reviewer)同样自动纳入。
 
 ## Steps
 
