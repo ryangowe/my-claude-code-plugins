@@ -16,13 +16,13 @@ reviewer 名单不写死。凡名字以 `-reviewer` 结尾、当前可用的 sub
 1. 确定审查范围:优先用给定的改动范围,否则运行 git diff。没有改动则停止并告知用户。
 2. 列出 reviewer:从可用的 subagent 类型中选出所有以 `-reviewer` 结尾的。如不确定,在已安装插件目录下 glob `agents/*-reviewer.md`。
 3. 准备传给每个 reviewer 的上下文:改动涉及的文件,以及(若已知)写代码时用到的 how-to skill。
-4. 并行分发:在同一条消息里发起全部 reviewer 的 Task 调用,把范围与上下文传给每一个。
+4. 并行分发:在同一条消息里发起全部 reviewer 的 Task 调用,把范围与上下文传给每一个。在调用里提醒每个 reviewer 先加载 how-to-review skill,拿到共用的流程与报告格式;拓展插件的 reviewer 可能没在自己文件里写这个提醒。
 5. 收齐结果后去重、排序,再输出汇总。
 
-## Dedupe and rank
+## Filter, dedupe, and rank
 
+- 先按置信度过滤:reviewer 只打分、不自己筛,这里丢掉 score < 80 的。
 - 去重:同一 `file:line` 的同一问题只留一条。多个 reviewer 都报的,记下全部来源。
-- 不改各 reviewer 自己的置信度过滤。入口只做去重与排序。
 - 每个 reviewer 的专长即它声明的侧重领域。
 - 按优先级分三层:
   1. 多个 reviewer 共同发现的问题。优先级最高。
