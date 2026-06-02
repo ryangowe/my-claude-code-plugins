@@ -2,7 +2,7 @@
 name: change-reviewer
 description: Use proactively to review just-written changes for real bugs, CLAUDE.md compliance, and how-to-skill adherence.
 tools: Read, Grep, Glob, Bash, Skill
-model: claude-sonnet
+model: sonnet
 effort: medium
 ---
 

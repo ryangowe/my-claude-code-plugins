@@ -14,7 +14,7 @@ reviewer 名单不写死。凡名字以 `-reviewer` 结尾、当前可用的 sub
 请严格按以下步骤执行:
 
 1. 确定审查范围:优先用给定的改动范围,否则运行 git diff。没有改动则停止并告知用户。
-2. 列出 reviewer:从可用的 subagent 类型中选出所有以 `-reviewer` 结尾的。如不确定,在已安装插件目录下 glob `agents/*-reviewer.md`。
+2. 列出 reviewer:从你可用的 subagent 类型里选出所有以 `-reviewer` 结尾的,并用它们的限定全名 `<插件名>:<agent>`(如 `basic-engineering:craft-reviewer`);裸名 `craft-reviewer` 不会解析。看不到完整列表时,在已安装插件目录 glob `*/agents/*-reviewer.md`,再用该插件 `.claude-plugin/plugin.json` 里的 `name` 拼成 `<name>:<文件名去掉 .md>`。
 3. 准备传给每个 reviewer 的上下文:改动涉及的文件,以及(若已知)写代码时用到的 how-to skill。
 4. 并行分发:在同一条消息里发起全部 reviewer 的 Task 调用,把范围与上下文传给每一个。在调用里提醒每个 reviewer 先加载 how-to-review skill,拿到共用的流程与报告格式;拓展插件的 reviewer 可能没在自己文件里写这个提醒。
 5. 收齐结果后去重、排序,再输出汇总。

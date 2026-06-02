@@ -1,10 +1,13 @@
-"""Stop hook: block when code files were edited but no reviewer agent was spawned."""
+"""Stop hook: gate code edits on a review -- any reviewer if proactive, else the review-board skill."""
 
 import json
 import sys
 from pathlib import Path
 
 _EDIT_TOOLS = frozenset({"Edit", "Write"})
+
+# The harness injects a prior block as a user message starting with this text.
+_STOP_FEEDBACK_PREFIX = "Stop hook feedback:"
 
 # Source-code suffixes (allowlist). Editing docs/config/data does not gate.
 _CODE_SUFFIXES = frozenset(
@@ -21,11 +24,19 @@ _CODE_SUFFIXES = frozenset(
 
 
 def check(transcript_path: str) -> dict:
-    """Return edited code files and whether any reviewer ran this turn."""
+    """Return edited code files and whether this turn's review is sufficient.
+
+    Until the gate first blocks, any reviewer counts -- a review done while writing.
+    Once it has blocked, the stop-without-review is after-the-fact, so only the
+    review-board skill counts: no self-picked single reviewer.
+    """
     entries = _load_transcript(transcript_path)
     turn = _current_turn(entries)
     code_files = _edited_code_files(turn)
-    reviewed = _reviewer_spawned(turn)
+    if _blocked_before(turn):
+        reviewed = _review_board_invoked(turn)
+    else:
+        reviewed = _reviewer_spawned(turn) or _review_board_invoked(turn)
     return {"code_files": sorted(code_files), "reviewed": reviewed}
 
 
@@ -42,15 +53,35 @@ def _load_transcript(path: str) -> list[dict]:
 
 
 def _current_turn(entries: list[dict]) -> list[dict]:
-    """Entries since the last real user prompt."""
+    """Entries since the last real user prompt.
+
+    A prior Stop-hook block is injected as a user string but is not a real prompt, so it
+    does not start a new turn -- the edits it gated stay in scope on re-check.
+    """
     turn: list[dict] = []
     for entry in reversed(entries):
         content = (entry.get("message") or {}).get("content")
         if entry.get("type") == "user" and isinstance(content, str):
+            if content.startswith(_STOP_FEEDBACK_PREFIX):
+                turn.append(entry)
+                continue
             break
         turn.append(entry)
     turn.reverse()
     return turn
+
+
+def _blocked_before(turn: list[dict]) -> bool:
+    """True if this gate already blocked earlier in the turn."""
+    for entry in turn:
+        content = (entry.get("message") or {}).get("content")
+        if (
+            entry.get("type") == "user"
+            and isinstance(content, str)
+            and content.startswith(_STOP_FEEDBACK_PREFIX)
+        ):
+            return True
+    return False
 
 
 def _edited_code_files(turn: list[dict]) -> set[str]:
@@ -71,7 +102,7 @@ def _edited_code_files(turn: list[dict]) -> set[str]:
 
 
 def _reviewer_spawned(turn: list[dict]) -> bool:
-    """True if any *-reviewer agent was spawned this turn (any one passes)."""
+    """True if any *-reviewer agent was spawned this turn."""
     for entry in turn:
         if entry.get("type") != "assistant":
             continue
@@ -84,16 +115,30 @@ def _reviewer_spawned(turn: list[dict]) -> bool:
     return False
 
 
+def _review_board_invoked(turn: list[dict]) -> bool:
+    """True if the review-board skill was invoked this turn."""
+    for entry in turn:
+        if entry.get("type") != "assistant":
+            continue
+        for block in (entry.get("message") or {}).get("content") or []:
+            if block.get("type") != "tool_use" or block.get("name") != "Skill":
+                continue
+            skill = (block.get("input") or {}).get("skill", "")
+            if skill.endswith("review-board"):
+                return True
+    return False
+
+
 def _block_decision(result: dict) -> dict | None:
     if not result["code_files"] or result["reviewed"]:
         return None
     listed = "\n".join(f"  - {p}" for p in result["code_files"])
     reason = (
-        f"You edited code but ran no reviewer:\n{listed}\n"
-        "Before responding, review what you wrote: spawn the appropriate *-reviewer "
-        "agent(s) for the changes (eg. craft-reviewer, comment-reviewer, change-reviewer). "
-        "For large or wide-ranging changes, invoke the basic-engineering:review-board skill "
-        "instead -- it fans out to every reviewer. Running any one reviewer satisfies this check."
+        f"You are stopping with edited code that was never reviewed:\n{listed}\n"
+        "Because the review is now after the fact, run the basic-engineering:review-board skill "
+        "-- it fans out to every available *-reviewer. A single self-picked reviewer will not "
+        "clear this; no downgrade. Going forward, review as you write: run the one relevant "
+        "*-reviewer for a small, focused change, and review-board for a large or wide-ranging one."
     )
     return {"decision": "block", "reason": reason}
 

@@ -30,7 +30,15 @@ def _agent_block(subagent_type: str) -> dict:
     return {"type": "tool_use", "name": "Agent", "input": {"subagent_type": subagent_type}}
 
 
+def _skill_block(skill: str) -> dict:
+    return {"type": "tool_use", "name": "Skill", "input": {"skill": skill}}
+
+
 def _user(text: str) -> dict:
+    return {"type": "user", "message": {"content": text}}
+
+
+def _stop_feedback(text: str = "Stop hook feedback: review needed") -> dict:
     return {"type": "user", "message": {"content": text}}
 
 
@@ -83,42 +91,77 @@ def test_deduplicates_files(make_transcript):
     assert result["code_files"] == ["/a.py"]
 
 
-# -- _reviewer_spawned ---------------------------------------------------------
+# -- review sufficiency: proactive vs after-the-fact ---------------------------
 
 
-@pytest.mark.parametrize(
-    "agent_type",
-    [
-        "basic-engineering:craft-reviewer",
-        "basic-engineering:comment-reviewer",
-        "basic-engineering:change-reviewer",
-        "python-engineering:python-change-reviewer",
-    ],
-)
-def test_any_reviewer_passes(make_transcript, agent_type):
+def test_proactive_single_reviewer_passes(make_transcript):
     entries = [
         _user("fix"),
         _assistant(_edit_block("/a.py")),
-        _assistant(_agent_block(agent_type)),
+        _assistant(_agent_block("basic-engineering:craft-reviewer")),
     ]
     result = require_review.check(make_transcript(entries))
     assert result["reviewed"] is True
 
 
-def test_not_reviewed_without_agent(make_transcript):
+@pytest.mark.parametrize("skill", ["basic-engineering:review-board", "review-board"])
+def test_review_board_passes(make_transcript, skill):
+    entries = [
+        _user("fix"),
+        _assistant(_edit_block("/a.py")),
+        _assistant(_skill_block(skill)),
+    ]
+    result = require_review.check(make_transcript(entries))
+    assert result["reviewed"] is True
+
+
+def test_not_reviewed_without_any_review(make_transcript):
     entries = [_user("fix"), _assistant(_edit_block("/a.py"))]
     result = require_review.check(make_transcript(entries))
     assert result["reviewed"] is False
 
 
-def test_ignores_non_reviewer_agents(make_transcript):
+def test_after_block_single_reviewer_does_not_pass(make_transcript):
     entries = [
         _user("fix"),
         _assistant(_edit_block("/a.py")),
-        _assistant(_agent_block("Explore")),
+        _stop_feedback(),
+        _assistant(_agent_block("basic-engineering:craft-reviewer")),
     ]
     result = require_review.check(make_transcript(entries))
     assert result["reviewed"] is False
+
+
+def test_after_block_review_board_passes(make_transcript):
+    entries = [
+        _user("fix"),
+        _assistant(_edit_block("/a.py")),
+        _stop_feedback(),
+        _assistant(_skill_block("basic-engineering:review-board")),
+    ]
+    result = require_review.check(make_transcript(entries))
+    assert result["reviewed"] is True
+
+
+def test_ignores_other_skills(make_transcript):
+    entries = [
+        _user("fix"),
+        _assistant(_edit_block("/a.py")),
+        _assistant(_skill_block("basic-engineering:how-to-document")),
+    ]
+    result = require_review.check(make_transcript(entries))
+    assert result["reviewed"] is False
+
+
+def test_stop_feedback_does_not_reset_turn(make_transcript):
+    entries = [
+        _user("fix"),
+        _assistant(_edit_block("/a.py")),
+        _stop_feedback(),
+        _assistant(_skill_block("basic-engineering:review-board")),
+    ]
+    result = require_review.check(make_transcript(entries))
+    assert result["code_files"] == ["/a.py"]
 
 
 # -- _current_turn -------------------------------------------------------------
@@ -186,7 +229,7 @@ def test_main_passes_when_reviewed(make_transcript, monkeypatch, capsys):
     entries = [
         _user("fix"),
         _assistant(_edit_block("/a.py")),
-        _assistant(_agent_block("basic-engineering:change-reviewer")),
+        _assistant(_skill_block("basic-engineering:review-board")),
     ]
     hook_input = {"hook_event_name": "Stop", "transcript_path": make_transcript(entries)}
     monkeypatch.setattr(sys, "stdin", StringIO(json.dumps(hook_input)))

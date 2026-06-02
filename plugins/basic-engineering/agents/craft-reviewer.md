@@ -1,7 +1,7 @@
 ---
 name: craft-reviewer
 description: Use proactively to review whether just-written code is well-crafted — idiomatic and using the best available API — independent of its purpose.
-model: claude-opus
+model: opus
 effort: high
 ---
 

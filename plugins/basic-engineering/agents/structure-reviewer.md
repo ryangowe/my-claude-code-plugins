@@ -1,7 +1,7 @@
 ---
 name: structure-reviewer
 description: Use proactively to review whether just-written code is well-structured — separation of concerns, module/file boundaries, and the design of the public interfaces it exposes — independent of its requirements.
-model: claude-opus
+model: opus
 effort: high
 tools: Read, Grep, Glob, Bash, Skill
 ---

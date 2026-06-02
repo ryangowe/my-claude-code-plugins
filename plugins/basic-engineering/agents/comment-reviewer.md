@@ -2,7 +2,7 @@
 name: comment-reviewer
 description: Use proactively to review comments and docstrings in just-written changes for clarity and staleness.
 tools: Read, Grep, Glob, Bash, Skill
-model: claude-haiku
+model: haiku
 effort: low
 ---
 
