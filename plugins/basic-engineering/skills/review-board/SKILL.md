@@ -7,7 +7,7 @@ description: Review the current change by fanning out to every available *-revie
 
 对当前改动做一次审查。本 skill 是入口编排: 并行调用所有可用的 `*-reviewer` subagent,再汇总它们的结果。
 
-reviewer 名单不写死。凡名字以 `-reviewer` 结尾、当前可用的 subagent 全部纳入。basic-engineering 自带 `craft-reviewer`、`comment-reviewer`、`change-reviewer`、`structure-reviewer`;其它已安装插件加入的 `*-reviewer`(如某语言知识库的 reviewer)同样自动纳入。
+reviewer 名单不写死。凡名字以 `-reviewer` 结尾、当前可用的 subagent 全部纳入。basic-engineering 自带 `craft-reviewer`、`comment-reviewer`、`change-reviewer`、`structure-reviewer`、`reuse-reviewer`;其它已安装插件加入的 `*-reviewer`(如某语言知识库的 reviewer)同样自动纳入。
 
 ## Steps
 
@@ -15,7 +15,7 @@ reviewer 名单不写死。凡名字以 `-reviewer` 结尾、当前可用的 sub
 
 1. 确定审查范围:优先用给定的改动范围,否则运行 git diff。没有改动则停止并告知用户。
 2. 列出 reviewer:从你可用的 subagent 类型里选出所有以 `-reviewer` 结尾的,并用它们的限定全名 `<插件名>:<agent>`(如 `basic-engineering:craft-reviewer`);裸名 `craft-reviewer` 不会解析。看不到完整列表时,在已安装插件目录 glob `*/agents/*-reviewer.md`,再用该插件 `.claude-plugin/plugin.json` 里的 `name` 拼成 `<name>:<文件名去掉 .md>`。
-3. 准备传给每个 reviewer 的上下文:改动涉及的文件,以及(若已知)写代码时用到的 how-to skill。
+3. 准备传给每个 reviewer 的上下文:改动涉及的文件,(若已知)写代码时用到的 how-to skill,以及(若已知)本次改动的需求 / 任务意图——接需求的 reviewer 会用到,其余的会忽略。
 4. 并行分发:在同一条消息里发起全部 reviewer 的 Task 调用,把范围与上下文传给每一个。在调用里提醒每个 reviewer 先加载 how-to-review skill,拿到共用的流程与报告格式;拓展插件的 reviewer 可能没在自己文件里写这个提醒。
 5. 收齐结果后去重、排序,再输出汇总。
 
