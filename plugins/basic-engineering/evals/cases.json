@@ -1,0 +1,33 @@
+{
+  "panel": "basic-engineering",
+  "cases": [
+    {
+      "id": "duration-seconds-helper",
+      "target_reviewer": "basic-engineering:structure-reviewer",
+      "fixture": "fixtures/duration-seconds-helper",
+      "scope": "Review the just-written files in fixtures/duration-seconds-helper/: a new Duration+Seconds.swift extension and the MockDetector code that uses it.",
+      "should_flag": true,
+      "expected_findings": [
+        {
+          "category": "\u63a5\u53e3\u5fc5\u8981\u6027",
+          "claim": "The `inSeconds` interface (Duration.inSeconds) need not exist. Read its call sites in MockDetector (timingSigma, onBeatHit, freeHit): every use converts a Duration to Double seconds and immediately wraps the result back into a Duration via `.seconds(...)`. The callers only ever do Duration-to-Duration arithmetic (scale by a factor, add, clamp), so the intermediate Double-seconds representation the interface exposes is unnecessary; the extension should be removed and the call sites should operate on Duration directly.",
+          "must_reference": [
+            "inSeconds",
+            "MockDetector.excerpt.swift"
+          ]
+        }
+      ],
+      "forbidden_findings": [
+        "Do not approve the helper as fine just because `inSeconds` reads as a clean one-line property in isolation \u2014 its redundancy is only visible from how the call sites use it.",
+        "Do not reduce it to a file-placement / separation-of-concerns nit (e.g. 'move the extension elsewhere') without questioning whether the interface should exist at all."
+      ],
+      "expected_min_confidence": 50,
+      "grading": "PASS when target_reviewer, by reading the call sites, raises that the `inSeconds` interface need not exist \u2014 its callers round-trip Duration -> Double -> Duration and only need Duration arithmetic, so the extension should be removed \u2014 at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Approving the helper, reporting no structure issue, or only nitpicking its file placement without questioning its existence, is FAIL.",
+      "origin": {
+        "repo": "clean-chord-app",
+        "session": "4c3db99c-23e2-4a26-a1a7-68fda3a6f4d3.jsonl",
+        "note": "review-board fanned out to 5 reviewers; all missed this. reuse-reviewer was correct in its own lens (the stdlib has no Double-seconds accessor); the miss is structural \u2014 the interface is unnecessary given its call sites \u2014 which is why this case targets structure-reviewer. The human questioned it (L142), which led to deleting the file (L164) and rewriting 3 call sites to use Duration operators directly (L171-177). This case is the reconstructed false negative; intent is withheld so the reviewer must derive the interface's necessity from usage."
+      }
+    }
+  ]
+}
