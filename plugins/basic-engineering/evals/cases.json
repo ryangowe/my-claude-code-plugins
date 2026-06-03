@@ -28,6 +28,35 @@
         "session": "4c3db99c-23e2-4a26-a1a7-68fda3a6f4d3.jsonl",
         "note": "review-board fanned out to 5 reviewers; all missed this. reuse-reviewer was correct in its own lens (the stdlib has no Double-seconds accessor); the miss is structural \u2014 the interface is unnecessary given its call sites \u2014 which is why this case targets structure-reviewer. The human questioned it (L142), which led to deleting the file (L164) and rewriting 3 call sites to use Duration operators directly (L171-177). This case is the reconstructed false negative; intent is withheld so the reviewer must derive the interface's necessity from usage."
       }
+    },
+    {
+      "id": "slide-easing-claim",
+      "target_reviewer": "basic-engineering:comment-reviewer",
+      "fixture": "fixtures/slide-easing-claim",
+      "scope": "Review the just-edited docstring on `enum Slide` in fixtures/slide-easing-claim/Slide.swift. The PlayheadChordView.excerpt.swift file in the same directory is the only call site \u2014 read it to see how `Slide.transition` and `Slide.duration` are actually used.",
+      "should_flag": true,
+      "expected_findings": [
+        {
+          "category": "\u8fc7\u65f6",
+          "claim": "The final docstring line `One-shot; symmetric easeInOut over duration.` is wrong as written: it asserts that the `Slide.transition(distance:)` primitive guarantees an easeInOut curve over `Slide.duration`, but the function body only composes `.asymmetric(.offset.combined(.opacity))` \u2014 it sets no animation curve and never references `duration`. The easeInOut + duration pairing lives at the call site (`.animation(.easeInOut(duration: Slide.duration), value: ...)` in PlayheadChordView.excerpt.swift), so the docstring is documenting a contract the type does not enforce.",
+          "must_reference": [
+            "easeInOut",
+            "Slide.swift",
+            "PlayheadChordView.excerpt.swift"
+          ]
+        }
+      ],
+      "forbidden_findings": [
+        "Do not approve the docstring as accurate by treating `easeInOut`/`duration` as 'implied by the caller' or 'acceptable convention' \u2014 the docstring states it as the primitive's own behavior.",
+        "Do not reduce this to a wording / 'could be shorter' nit without flagging that the easing claim is unbacked by the code."
+      ],
+      "expected_min_confidence": 60,
+      "grading": "PASS when target_reviewer flags that the docstring's easeInOut-over-duration claim does not match the function body (the function sets no curve and never touches `duration`; the call site supplies both) at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Reporting only readability / leading-vs-trailing wording, or concluding 'no issues', is FAIL.",
+      "origin": {
+        "repo": "clean-chord-app",
+        "session": "5f1cd98d-7521-406e-a2e1-966e78c6fed7.jsonl",
+        "note": "review-board fanned out to all 5 reviewers on a docstring cleanup. comment-reviewer ran its full readable/stale/redundant/snapshot/attention checklist and returned 'No issues found'. change-reviewer (docs-deviation) and craft-reviewer both noted in passing that `easeInOut` is not encoded in `Slide.transition` and depends on the caller, but at sub-threshold confidence so review-board dropped both and reported all-clear. This case is the reconstructed false negative for comment-reviewer: the docstring asserts a contract the function body does not enforce, which is exactly the staleness lens comment-reviewer owns. Scope deliberately includes the call-site excerpt so the reviewer can verify where easing actually lives; intent is withheld."
+      }
     }
   ]
 }

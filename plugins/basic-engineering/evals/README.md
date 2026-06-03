@@ -42,3 +42,4 @@ fixture 是「刚写好的改动」的快照,**不能泄露答案**:不要在 fi
 ## Cases
 
 - **duration-seconds-helper** — target:structure-reviewer。不给 intent。期望命中与来历见 `cases.json`(答案在那里,本节不剧透)。
+- **slide-easing-claim** — target:comment-reviewer。不给 intent。fixture 含 `Slide.swift` 与一份 `PlayheadChordView.excerpt.swift` 调用方片段。期望命中与来历见 `cases.json`。
