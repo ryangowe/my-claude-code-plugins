@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #faf9f5;
+  --side: #efede3;
+  --text: #23221f;
+  --muted: #74726a;
+  --faint: #9c9a90;
+  --border: #e6e3d9;
+  --hl: #f1efe6;
+  --accent: #d97757;
+  --accent-ink: #7c3d26;
+  --accent-soft: #f7e9e1;
+  --paper: #ffffff;
+}
+
+.sidebar {
+  width: clamp(206px, 20vw, 300px);
+  flex: none;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--side);
+  border-right: 1px solid var(--border);
+}
+.sidebar-header {
+  padding: 22px 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.sidebar-logo-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.sidebar-logo-text {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.sidebar-subtitle {
+  font-size: 11.5px;
+  color: var(--faint);
+  margin-top: 7px;
+}
+.sidebar-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 14px;
+}
+.section-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--faint);
+  padding: 0 6px 8px;
+}
+.outline-node {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 12.5px;
+  line-height: 1.35;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.outline-node:hover {
+  background: var(--hl);
+  color: var(--text);
+}
+.outline-node.active {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.outline-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sidebar-footer {
+  padding: 12px 14px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.comment-count-label {
+  font-size: 11px;
+  color: var(--faint);
+}
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  background: var(--paper);
+  color: var(--muted);
+  border-radius: 8px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.12s;
+}
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}

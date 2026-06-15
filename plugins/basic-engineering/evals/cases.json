@@ -57,6 +57,67 @@
         "session": "5f1cd98d-7521-406e-a2e1-966e78c6fed7.jsonl",
         "note": "review-board fanned out to all 5 reviewers on a docstring cleanup. comment-reviewer ran its full readable/stale/redundant/snapshot/attention checklist and returned 'No issues found'. change-reviewer (docs-deviation) and craft-reviewer both noted in passing that `easeInOut` is not encoded in `Slide.transition` and depends on the caller, but at sub-threshold confidence so review-board dropped both and reported all-clear. This case is the reconstructed false negative for comment-reviewer: the docstring asserts a contract the function body does not enforce, which is exactly the staleness lens comment-reviewer owns. Scope deliberately includes the call-site excerpt so the reviewer can verify where easing actually lives; intent is withheld."
       }
+    },
+    {
+      "id": "tailwind-handwritten-sidebar",
+      "target_reviewer": "basic-engineering:reuse-reviewer",
+      "also_expected": [
+        "basic-engineering:craft-reviewer"
+      ],
+      "fixture": "fixtures/tailwind-handwritten-sidebar",
+      "scope": "Review the just-written files in fixtures/tailwind-handwritten-sidebar/: a Sidebar component (Sidebar.tsx) with its stylesheet (style.css) and the project's dependency manifest (package.excerpt.json).",
+      "intent": "Build a sidebar panel for a document review web app, with outline navigation, comment count, and theme toggle.",
+      "should_flag": true,
+      "expected_findings": [
+        {
+          "category": "\u7b2c\u4e09\u65b9\u5e93",
+          "claim": "Tailwind CSS is imported at line 1 of style.css (`@import \"tailwindcss\"`) and listed as a dependency in package.excerpt.json, but zero Tailwind utility classes appear anywhere in the codebase. The entire stylesheet (100+ rules) hand-writes properties that Tailwind utility classes directly provide: `display: flex` / `align-items: center` / `gap` / `padding` / `border-radius` / `font-size` / `font-weight` / `color` / `border` / `cursor` / `overflow` / `text-overflow`. The Sidebar component should apply Tailwind classes in JSX (`className=\"flex items-center gap-2 ...\"`) instead of maintaining a parallel hand-written stylesheet.",
+          "must_reference": [
+            "tailwindcss",
+            "style.css",
+            "Sidebar.tsx"
+          ]
+        }
+      ],
+      "forbidden_findings": [
+        "Do not approve the hand-written CSS as necessary 'custom design-system work' or 'styles that go beyond Tailwind' \u2014 the rules use standard layout, spacing, typography, and color properties that are Tailwind's core utility surface.",
+        "Do not reduce this to 'could sprinkle in some Tailwind classes' without flagging that the entire stylesheet systematically bypasses the imported framework."
+      ],
+      "expected_min_confidence": 60,
+      "grading": "PASS when target_reviewer flags that Tailwind is imported and installed but completely unused \u2014 the CSS hand-writes utilities (flex, padding, gap, border-radius, font-size, color, etc.) that Tailwind provides \u2014 and recommends using Tailwind utility classes in JSX instead, at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Concluding 'no reuse issues', or only noting minor opportunities without flagging the systematic bypass of the imported framework, is FAIL.",
+      "origin": {
+        "repo": "lotra",
+        "session": "8ea13de3-b5b3-45c2-b785-df5a46e465d6.jsonl",
+        "note": "The React SPA rewrite (commit 20de1cc) added `@import \"tailwindcss\"` and tailwindcss to package.json, then wrote 1068 lines of hand-written CSS in a single file. review-board ran twice across sessions 8ea13de3 and 54d82525 with 5\u20136 reviewers each time (9 findings, then 17, then 13); none flagged that Tailwind was imported but unused \u2014 all findings targeted JS logic (XSS, dead code, race conditions). reuse-reviewer checked for standard-lib and third-party alternatives to JS utilities but never examined the CSS against the project's own installed styling framework. The user eventually asked (session 3694fb99, L797) 'css \u4e3a\u4ec0\u4e48\u8fd9\u4e48\u957f' and (L833) 'Tailwind \u5e94\u8be5\u5f88\u65e9\u5c31\u63a5\u5165\u4e86\u3002\u4e3a\u4ec0\u4e48\u5230\u73b0\u5728\u90fd\u6ca1\u6709\u7f16\u8bd1\u51fa\u6765', leading to the discovery that Tailwind had never been compiled (missing bun-plugin-tailwind and bunfig.toml) and the entire CSS was hand-written. Further, the dependency was added in the same commit but only half-integrated \u2014 `@import` present, build pipeline absent. This case reconstructs the reuse false negative; the fixture includes the framework import and dependency to test whether the reviewer catches the systematic bypass."
+      }
+    },
+    {
+      "id": "monolith-stylesheet",
+      "target_reviewer": "basic-engineering:structure-reviewer",
+      "fixture": "fixtures/monolith-stylesheet",
+      "scope": "Review the just-written files in fixtures/monolith-stylesheet/: a global stylesheet (style.css) and the React components that consume it (App.excerpt.tsx, CommentCard.excerpt.tsx, SubmitFloat.excerpt.tsx).",
+      "should_flag": true,
+      "expected_findings": [
+        {
+          "category": "\u5173\u6ce8\u70b9\u5206\u79bb",
+          "claim": "A single global style.css contains all UI styles for 6 unrelated component concerns \u2014 sidebar navigation, document reading area with serif typography, comment cards with markdown body, status badge controls, floating submit panel, and toast notifications \u2014 separated only by section-marker comments (`/* ===== SIDEBAR ===== */`, `/* ===== COMMENT CARDS ===== */`, etc.). Each concern corresponds to a separate React component (Sidebar, ReadingArea, CommentCard, StatusMenu, SubmitFloat) but all share one monolith file imported once in App. Styles should be co-located with their components (CSS Modules, component-scoped files, or at minimum one stylesheet per component family) so that each module owns its own styles.",
+          "must_reference": [
+            "style.css",
+            "App.excerpt.tsx"
+          ]
+        }
+      ],
+      "forbidden_findings": [
+        "Do not approve the monolith as acceptable 'because CSS is inherently global' or 'section comments provide enough structure' \u2014 the project already uses per-file React components, so per-component styles are the natural corollary.",
+        "Do not reduce this to a file-length nitpick without identifying the separation-of-concerns violation: 6 independent component concerns in one file."
+      ],
+      "expected_min_confidence": 50,
+      "grading": "PASS when target_reviewer flags that the single stylesheet bundles styles for multiple independent components and recommends splitting them to co-locate with their React modules, at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Approving the monolith, reporting no structure issue, or only noting minor duplication within one section, is FAIL.",
+      "origin": {
+        "repo": "lotra",
+        "session": "3694fb99-8ec8-492b-a629-a41a443782ce.jsonl",
+        "note": "Same incident as tailwind-handwritten-sidebar. The 1068-line style.css served 6 component concerns in one global file. review-board ran on individual component diffs (Sidebar.tsx, useComments.ts, ReadingArea.tsx) but never reviewed style.css as a whole \u2014 each reviewer saw only the TSX diff for a single component. When the user asked (L797) 'css \u4e3a\u4ec0\u4e48\u8fd9\u4e48\u957f', the assistant's own breakdown showed 6 distinct sections (sidebar 27%, comments 32%, reading area 21%, themes 5%, submit 8%, reset 5%). No reviewer flagged the monolith because none was scoped to see the full file. The user's reaction (L815): '\u4e3a\u4ec0\u4e48 reviewer \u6ca1\u6709\u68c0\u67e5\u8fd9\u4e2a\u3002\u4ee5\u53ca\u4f60\u81ea\u5df1\u4e3a\u4ec0\u4e48\u5bf9\u4e00\u4e2a\u6587\u4ef6\u5199 1000 \u884c\u6ca1\u6709\u4efb\u4f55\u81ea\u89c9'. This case tests whether structure-reviewer, given the full file and consuming components, catches the separation-of-concerns violation."
+      }
     }
   ]
 }
