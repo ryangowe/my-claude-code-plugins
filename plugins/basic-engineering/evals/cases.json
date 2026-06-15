@@ -1,9 +1,9 @@
 {
   "panel": "basic-engineering",
+  "skill": "review-board",
   "cases": [
     {
       "id": "duration-seconds-helper",
-      "target_reviewer": "basic-engineering:structure-reviewer",
       "fixture": "fixtures/duration-seconds-helper",
       "scope": "Review the just-written files in fixtures/duration-seconds-helper/: a new Duration+Seconds.swift extension and the MockDetector code that uses it.",
       "should_flag": true,
@@ -22,16 +22,16 @@
         "Do not reduce it to a file-placement / separation-of-concerns nit (e.g. 'move the extension elsewhere') without questioning whether the interface should exist at all."
       ],
       "expected_min_confidence": 50,
-      "grading": "PASS when target_reviewer, by reading the call sites, raises that the `inSeconds` interface need not exist \u2014 its callers round-trip Duration -> Double -> Duration and only need Duration arithmetic, so the extension should be removed \u2014 at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Approving the helper, reporting no structure issue, or only nitpicking its file placement without questioning its existence, is FAIL.",
+      "grading": "PASS when review-board output, from any reviewer, raises that the `inSeconds` interface need not exist \u2014 its callers round-trip Duration -> Double -> Duration and only need Duration arithmetic, so the extension should be removed \u2014 at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Approving the helper, reporting no structure issue, or only nitpicking its file placement without questioning its existence, is FAIL.",
       "origin": {
         "repo": "clean-chord-app",
         "session": "4c3db99c-23e2-4a26-a1a7-68fda3a6f4d3.jsonl",
-        "note": "review-board fanned out to 5 reviewers; all missed this. reuse-reviewer was correct in its own lens (the stdlib has no Double-seconds accessor); the miss is structural \u2014 the interface is unnecessary given its call sites \u2014 which is why this case targets structure-reviewer. The human questioned it (L142), which led to deleting the file (L164) and rewriting 3 call sites to use Duration operators directly (L171-177). This case is the reconstructed false negative; intent is withheld so the reviewer must derive the interface's necessity from usage."
+        "expected_reviewer": "structure-reviewer",
+        "note": "review-board fanned out to 5 reviewers; all missed this. reuse-reviewer was correct in its own lens (the stdlib has no Double-seconds accessor); the miss is structural \u2014 the interface is unnecessary given its call sites. The human questioned it (L142), which led to deleting the file (L164) and rewriting 3 call sites to use Duration operators directly (L171-177). This case is the reconstructed false negative; intent is withheld so the reviewer must derive the interface's necessity from usage."
       }
     },
     {
       "id": "slide-easing-claim",
-      "target_reviewer": "basic-engineering:comment-reviewer",
       "fixture": "fixtures/slide-easing-claim",
       "scope": "Review the just-edited docstring on `enum Slide` in fixtures/slide-easing-claim/Slide.swift. The PlayheadChordView.excerpt.swift file in the same directory is the only call site \u2014 read it to see how `Slide.transition` and `Slide.duration` are actually used.",
       "should_flag": true,
@@ -51,19 +51,16 @@
         "Do not reduce this to a wording / 'could be shorter' nit without flagging that the easing claim is unbacked by the code."
       ],
       "expected_min_confidence": 60,
-      "grading": "PASS when target_reviewer flags that the docstring's easeInOut-over-duration claim does not match the function body (the function sets no curve and never touches `duration`; the call site supplies both) at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Reporting only readability / leading-vs-trailing wording, or concluding 'no issues', is FAIL.",
+      "grading": "PASS when review-board output, from any reviewer, flags that the docstring's easeInOut-over-duration claim does not match the function body (the function sets no curve and never touches `duration`; the call site supplies both) at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Reporting only readability / leading-vs-trailing wording, or concluding 'no issues', is FAIL.",
       "origin": {
         "repo": "clean-chord-app",
         "session": "5f1cd98d-7521-406e-a2e1-966e78c6fed7.jsonl",
+        "expected_reviewer": "comment-reviewer",
         "note": "review-board fanned out to all 5 reviewers on a docstring cleanup. comment-reviewer ran its full readable/stale/redundant/snapshot/attention checklist and returned 'No issues found'. change-reviewer (docs-deviation) and craft-reviewer both noted in passing that `easeInOut` is not encoded in `Slide.transition` and depends on the caller, but at sub-threshold confidence so review-board dropped both and reported all-clear. This case is the reconstructed false negative for comment-reviewer: the docstring asserts a contract the function body does not enforce, which is exactly the staleness lens comment-reviewer owns. Scope deliberately includes the call-site excerpt so the reviewer can verify where easing actually lives; intent is withheld."
       }
     },
     {
       "id": "tailwind-handwritten-sidebar",
-      "target_reviewer": "basic-engineering:reuse-reviewer",
-      "also_expected": [
-        "basic-engineering:craft-reviewer"
-      ],
       "fixture": "fixtures/tailwind-handwritten-sidebar",
       "scope": "Review the just-written files in fixtures/tailwind-handwritten-sidebar/: a Sidebar component (Sidebar.tsx) with its stylesheet (style.css) and the project's dependency manifest (package.excerpt.json).",
       "intent": "Build a sidebar panel for a document review web app, with outline navigation, comment count, and theme toggle.",
@@ -84,16 +81,16 @@
         "Do not reduce this to 'could sprinkle in some Tailwind classes' without flagging that the entire stylesheet systematically bypasses the imported framework."
       ],
       "expected_min_confidence": 60,
-      "grading": "PASS when target_reviewer flags that Tailwind is imported and installed but completely unused \u2014 the CSS hand-writes utilities (flex, padding, gap, border-radius, font-size, color, etc.) that Tailwind provides \u2014 and recommends using Tailwind utility classes in JSX instead, at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Concluding 'no reuse issues', or only noting minor opportunities without flagging the systematic bypass of the imported framework, is FAIL.",
+      "grading": "PASS when review-board output, from any reviewer, flags that Tailwind is imported and installed but completely unused \u2014 the CSS hand-writes utilities (flex, padding, gap, border-radius, font-size, color, etc.) that Tailwind provides \u2014 and recommends using Tailwind utility classes in JSX instead, at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Concluding 'no reuse issues', or only noting minor opportunities without flagging the systematic bypass of the imported framework, is FAIL.",
       "origin": {
         "repo": "lotra",
         "session": "8ea13de3-b5b3-45c2-b785-df5a46e465d6.jsonl",
+        "expected_reviewer": "reuse-reviewer",
         "note": "The React SPA rewrite (commit 20de1cc) added `@import \"tailwindcss\"` and tailwindcss to package.json, then wrote 1068 lines of hand-written CSS in a single file. review-board ran twice across sessions 8ea13de3 and 54d82525 with 5\u20136 reviewers each time (9 findings, then 17, then 13); none flagged that Tailwind was imported but unused \u2014 all findings targeted JS logic (XSS, dead code, race conditions). reuse-reviewer checked for standard-lib and third-party alternatives to JS utilities but never examined the CSS against the project's own installed styling framework. The user eventually asked (session 3694fb99, L797) 'css \u4e3a\u4ec0\u4e48\u8fd9\u4e48\u957f' and (L833) 'Tailwind \u5e94\u8be5\u5f88\u65e9\u5c31\u63a5\u5165\u4e86\u3002\u4e3a\u4ec0\u4e48\u5230\u73b0\u5728\u90fd\u6ca1\u6709\u7f16\u8bd1\u51fa\u6765', leading to the discovery that Tailwind had never been compiled (missing bun-plugin-tailwind and bunfig.toml) and the entire CSS was hand-written. Further, the dependency was added in the same commit but only half-integrated \u2014 `@import` present, build pipeline absent. This case reconstructs the reuse false negative; the fixture includes the framework import and dependency to test whether the reviewer catches the systematic bypass."
       }
     },
     {
       "id": "monolith-stylesheet",
-      "target_reviewer": "basic-engineering:structure-reviewer",
       "fixture": "fixtures/monolith-stylesheet",
       "scope": "Review the just-written files in fixtures/monolith-stylesheet/: a global stylesheet (style.css) and the React components that consume it (App.excerpt.tsx, CommentCard.excerpt.tsx, SubmitFloat.excerpt.tsx).",
       "should_flag": true,
@@ -112,11 +109,12 @@
         "Do not reduce this to a file-length nitpick without identifying the separation-of-concerns violation: 6 independent component concerns in one file."
       ],
       "expected_min_confidence": 50,
-      "grading": "PASS when target_reviewer flags that the single stylesheet bundles styles for multiple independent components and recommends splitting them to co-locate with their React modules, at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Approving the monolith, reporting no structure issue, or only noting minor duplication within one section, is FAIL.",
+      "grading": "PASS when review-board output, from any reviewer, flags that the single stylesheet bundles styles for multiple independent components and recommends splitting them to co-locate with their React modules, at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Approving the monolith, reporting no structure issue, or only noting minor duplication within one section, is FAIL.",
       "origin": {
         "repo": "lotra",
         "session": "3694fb99-8ec8-492b-a629-a41a443782ce.jsonl",
-        "note": "Same incident as tailwind-handwritten-sidebar. The 1068-line style.css served 6 component concerns in one global file. review-board ran on individual component diffs (Sidebar.tsx, useComments.ts, ReadingArea.tsx) but never reviewed style.css as a whole \u2014 each reviewer saw only the TSX diff for a single component. When the user asked (L797) 'css \u4e3a\u4ec0\u4e48\u8fd9\u4e48\u957f', the assistant's own breakdown showed 6 distinct sections (sidebar 27%, comments 32%, reading area 21%, themes 5%, submit 8%, reset 5%). No reviewer flagged the monolith because none was scoped to see the full file. The user's reaction (L815): '\u4e3a\u4ec0\u4e48 reviewer \u6ca1\u6709\u68c0\u67e5\u8fd9\u4e2a\u3002\u4ee5\u53ca\u4f60\u81ea\u5df1\u4e3a\u4ec0\u4e48\u5bf9\u4e00\u4e2a\u6587\u4ef6\u5199 1000 \u884c\u6ca1\u6709\u4efb\u4f55\u81ea\u89c9'. This case tests whether structure-reviewer, given the full file and consuming components, catches the separation-of-concerns violation."
+        "expected_reviewer": "structure-reviewer",
+        "note": "Same incident as tailwind-handwritten-sidebar. The 1068-line style.css served 6 component concerns in one global file. review-board ran on individual component diffs (Sidebar.tsx, useComments.ts, ReadingArea.tsx) but never reviewed style.css as a whole \u2014 each reviewer saw only the TSX diff for a single component. When the user asked (L797) 'css \u4e3a\u4ec0\u4e48\u8fd9\u4e48\u957f', the assistant's own breakdown showed 6 distinct sections (sidebar 27%, comments 32%, reading area 21%, themes 5%, submit 8%, reset 5%). No reviewer flagged the monolith because none was scoped to see the full file. The user's reaction (L815): '\u4e3a\u4ec0\u4e48 reviewer \u6ca1\u6709\u68c0\u67e5\u8fd9\u4e2a\u3002\u4ee5\u53ca\u4f60\u81ea\u5df1\u4e3a\u4ec0\u4e48\u5bf9\u4e00\u4e2a\u6587\u4ef6\u5199 1000 \u884c\u6ca1\u6709\u4efb\u4f55\u81ea\u89c9'. This case tests whether review-board, given the full file and consuming components, catches the separation-of-concerns violation."
       }
     }
   ]

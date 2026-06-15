@@ -1,6 +1,6 @@
-# Reviewer evals
+# Review-board evals
 
-给本插件的 `*-reviewer` agent 做评测的用例。每个 case 给一段 fixture 代码,断言某个 reviewer **该报什么 / 不该报什么**,用来量化命中率与误报率。没有内置 runner——按下面的流程用 subagent 手动跑、手动判分。
+给 `review-board` skill 做端到端评测的用例。每个 case 给一段 fixture 代码,把 scope 交给 review-board,断言汇总输出里**该出现什么 / 不该出现什么**。不区分哪个 reviewer 命中——只要最终汇总里有就算 PASS。
 
 ## Layout
 
@@ -14,34 +14,31 @@ fixture 是「刚写好的改动」的快照,**不能泄露答案**:不要在 fi
 
 ## cases.json schema
 
-顶层:`panel` 标明这套用例属于哪个 reviewer 插件;`cases` 是用例数组。每个 case:
+顶层:`panel` 标明插件;`skill` 标明被测 skill;`cases` 是用例数组。每个 case:
 
 - `id` — 用例主键,**必须与 `fixtures/<id>/` 目录名一致**。
-- `target_reviewer` — 被测 reviewer 的限定名(如 `basic-engineering:reuse-reviewer`)。
-- `also_expected` — 也合理命中的其他 reviewer(可选)。
 - `fixture` — 输入代码目录,相对本文件。
-- `scope` — 交给 reviewer 的评审范围,只说「审哪些文件」。
-- `intent` — 可选。代码的**领域意图**,供接需求的 reviewer 判断现成 API 是否覆盖;只写代码要达成什么,**不写该用哪个 API / 怎么简化**。当一条 case 要考的就是「reviewer 能不能只凭用法判断」(如接口该不该存在),**就不给 intent**——隐藏意图,逼它从代码自己推。
+- `scope` — 交给 review-board 的审查范围,只说「审哪些文件」。
+- `intent` — 可选。代码的**领域意图**,供接需求的 reviewer 判断;只写代码要达成什么,**不写该用哪个 API / 怎么简化**。当一条 case 要考的就是「reviewer 能不能只凭用法判断」(如接口该不该存在),**就不给 intent**——隐藏意图,逼它从代码自己推。
 - `should_flag` — 这个 fixture 该不该被命中。
-- `expected_findings` — 期望命中的点:`category`(用 agent 文件里的类别)、`claim`(语义断言)、`must_reference`(应点到的符号 / 文件)。
-- `forbidden_findings` — 期望 reviewer **不**说的话:误报,或把问题判成「没问题」。报告里出现任一条即判 FAIL。
+- `expected_findings` — 期望命中的点:`category`、`claim`(语义断言)、`must_reference`(应点到的符号 / 文件)。
+- `forbidden_findings` — 期望 review-board **不**说的话:误报,或把问题判成「没问题」。汇总里出现任一条即判 FAIL。
 - `expected_min_confidence` — 命中那条的置信度下限(对齐 how-to-review 的 0–100 rubric)。
 - `grading` — PASS / FAIL 判定口径。
-- `origin` — 来历(真实 session、行号),标明这是重建的真实回归。
+- `origin` — 来历(真实 session、行号),标明这是重建的真实回归。`expected_reviewer` 记录最可能命中的 reviewer(仅供调试,不影响判分)。
 
-**只有 `scope`(及存在时的 `intent`)会进 reviewer 的 prompt。** `expected_findings` / `forbidden_findings` / `grading` / `origin` 以及本 README 都是判分方(人 / grader)专用,绝不能透给被测 reviewer,否则评测失真。
+**只有 `scope`(及存在时的 `intent`)会进 review-board 的 prompt。** `expected_findings` / `forbidden_findings` / `grading` / `origin` 以及本 README 都是判分方(人 / grader)专用,绝不能透给被测 skill,否则评测失真。
 
 ## Running a case
 
-1. **隔离 fixture**:先把 `fixtures/<id>/` 里的代码复制到 evals 目录之外的临时目录(如 `/tmp/<id>/`)。
-2. **运行 reviewer**:用 Task 启动一个 `subagent_type = <target_reviewer>` 的 subagent,把 `scope`(以及 `intent`,如果有)作为它的任务,把临时目录作为待审的改动,收集它的报告。任务里写明:本次评测只允许读取这个临时目录,禁止 Read / Grep / Glob 任何该目录以外的路径。Task 工具没有目录参数,subagent 默认在仓库 cwd 下搜索,reuse 类 reviewer 的「仓库内已有」检查会 grep 到 `cases.json` 等判分文件;这条限制把答案挡在评测范围之外,reviewer 越界即评测作废。
-3. **判分**:按 `grading` 的口径,把报告逐条对照 `expected_findings` 和 `forbidden_findings`,判定 PASS 或 FAIL,并引用报告原文作为依据。语义吻合即可,不必逐字相同。
-4. **复现基线(可选)**:让同一份 fixture 再走一遍 `review-board`,看整组 panel 是否重演 `origin` 记录的那次漏报。
-5. 把结果写入相邻的 `evals-workspace/iteration-N/<case-id>/`。
+1. **隔离 fixture**:把 `fixtures/<id>/` 里的代码复制到 evals 目录之外的临时目录(如 `/tmp/<id>/`)。
+2. **运行 review-board**:调用 review-board skill,把 `scope`(以及 `intent`,如果有)作为输入,把临时目录作为待审的改动。review-board 会自行分发给所有可用 reviewer 并汇总。任务里写明:本次评测只允许读取这个临时目录,禁止 Read / Grep / Glob 任何该目录以外的路径,避免 reviewer grep 到 `cases.json` 等判分文件。
+3. **判分**:按 `grading` 的口径,把 review-board 的汇总输出逐条对照 `expected_findings` 和 `forbidden_findings`,判定 PASS 或 FAIL,并引用报告原文作为依据。不要求特定 reviewer 命中——只要汇总里有即可。语义吻合即可,不必逐字相同。
+4. 把结果写入相邻的 `evals-workspace/iteration-N/<case-id>/`。
 
 ## Cases
 
-- **duration-seconds-helper** — target:structure-reviewer。不给 intent。期望命中与来历见 `cases.json`(答案在那里,本节不剧透)。
-- **slide-easing-claim** — target:comment-reviewer。不给 intent。fixture 含 `Slide.swift` 与一份 `PlayheadChordView.excerpt.swift` 调用方片段。期望命中与来历见 `cases.json`。
-- **tailwind-handwritten-sidebar** — target:reuse-reviewer,also_expected:craft-reviewer。给 intent。fixture 含 `Sidebar.tsx`、`style.css`、`package.excerpt.json`。期望命中与来历见 `cases.json`。
-- **monolith-stylesheet** — target:structure-reviewer。不给 intent。fixture 含 `style.css`(6 个组件的样式全在一个文件)和 3 个消费组件 excerpt。期望命中与来历见 `cases.json`。
+- **duration-seconds-helper** — 不给 intent。fixture 含 `Duration+Seconds.swift` 与 `MockDetector.excerpt.swift`。期望命中与来历见 `cases.json`。
+- **slide-easing-claim** — 不给 intent。fixture 含 `Slide.swift` 与 `PlayheadChordView.excerpt.swift`。期望命中与来历见 `cases.json`。
+- **tailwind-handwritten-sidebar** — 给 intent。fixture 含 `Sidebar.tsx`、`style.css`、`package.excerpt.json`。期望命中与来历见 `cases.json`。
+- **monolith-stylesheet** — 不给 intent。fixture 含 `style.css`(1068 行,6 个组件的样式)和 3 个消费组件 excerpt。期望命中与来历见 `cases.json`。
