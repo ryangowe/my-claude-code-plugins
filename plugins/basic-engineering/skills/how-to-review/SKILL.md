@@ -1,6 +1,6 @@
 ---
 name: how-to-review
-description: Load when running as a *-reviewer subagent. Holds the shared review procedure, confidence rubric, false-positive list, and report format; your agent file adds only your specialty.
+description: Load when running as a *-reviewer subagent. Holds the shared review procedure, issue categories, false-positive list, and report format; your agent file adds only your specialty.
 ---
 
 # How to review
@@ -12,19 +12,21 @@ You run as a single reviewer, not an orchestrator: do each step yourself, and do
 1. Check whether the change needs a review at all: if there are no changes, the change is automated, or it is very simple and obviously ok, do not proceed.
 2. Use the given scope if provided, otherwise run git diff, and form a short summary of the change.
 3. Make a todo list, then review along your specialty's lenses, returning a list of issues and the reason each was flagged.
-4. Score every issue (rubric below). You score, you do not filter: report every issue with its score and let the orchestrator drop the low ones.
+4. Classify every issue into one of the categories below. You classify, you do not filter: report every issue with its category and let the orchestrator decide what to drop.
 
-## Confidence rubric
+## Issue categories
 
-Score each issue on a scale from 0-100:
+每条发现归入以下类别之一:
 
-- 0: Not confident at all. This is a false positive that doesn't stand up to light scrutiny, or is a pre-existing issue.
-- 25: Somewhat confident. This might be a real issue, but may also be a false positive, and you weren't able to verify it. If the issue is stylistic, it is one not explicitly called out in a relevant rule.
-- 50: Moderately confident. You verified this is a real issue, but it might be a nitpick or not happen very often in practice; relative to the rest of the change, it's not very important.
-- 75: Highly confident. You double-checked and verified it is very likely a real issue that will be hit in practice; the existing approach is insufficient. It is important and will directly impact functionality, or it is directly mentioned in a relevant rule.
-- 100: Absolutely certain. You double-checked and confirmed it is definitely a real issue that will happen frequently in practice; the evidence directly confirms it.
+- **常识问题**: 不看代码细节也知道不对,合格工程师的直觉。如单文件 1000 行、装了框架不用从零手写。
+- **bug**: 运行时会出错。如 XSS、空指针、竞态、未处理错误。
+- **错误做法**: 能跑,但做法本身是错的。如半成品依赖、用错 API、该用库的地方手搓。
+- **设计问题**: 接口/结构/组织可以更好。如接口不该存在、关注点混杂、过度解耦。
+- **文档不符**: 注释/文档与代码实际行为不一致。
+- **需确认**: reviewer 无法独立判断,需要人看需求或上下文。
+- **惯例**: 命名/风格不符合语言或项目约定。
 
-If you can't verify an issue, say so rather than asserting it.
+拿不准的问题归为需确认,不要硬断言。
 
 ## False positives
 
@@ -39,16 +41,16 @@ If you can't verify an issue, say so rather than asserting it.
 
 Cite each issue's `file:line`, keep your output brief, and avoid emojis.
 
-When you found issues (example with 2), using the review name and categories from your agent file:
+When you found issues (example with 2), using the review name from your agent file and the shared categories above:
 
 ```text
 ### <review name>
 
 Found 2 issues:
 
-1. <brief description> (<category>) — `path/to/file:line` [score: NN]
+1. <brief description> (常识问题) — `path/to/file:line`
    Suggestion: <concrete fix>
-2. <brief description> (<category>) — `path/to/file:line` [score: NN]
+2. <brief description> (bug) — `path/to/file:line`
    Suggestion: <concrete fix>
 ```
 
