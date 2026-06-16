@@ -116,6 +116,34 @@
         "expected_reviewer": "structure-reviewer",
         "note": "Same incident as tailwind-handwritten-sidebar. The 1068-line style.css served 6 component concerns in one global file. review-board ran on individual component diffs (Sidebar.tsx, useComments.ts, ReadingArea.tsx) but never reviewed style.css as a whole \u2014 each reviewer saw only the TSX diff for a single component. When the user asked (L797) 'css \u4e3a\u4ec0\u4e48\u8fd9\u4e48\u957f', the assistant's own breakdown showed 6 distinct sections (sidebar 27%, comments 32%, reading area 21%, themes 5%, submit 8%, reset 5%). No reviewer flagged the monolith because none was scoped to see the full file. The user's reaction (L815): '\u4e3a\u4ec0\u4e48 reviewer \u6ca1\u6709\u68c0\u67e5\u8fd9\u4e2a\u3002\u4ee5\u53ca\u4f60\u81ea\u5df1\u4e3a\u4ec0\u4e48\u5bf9\u4e00\u4e2a\u6587\u4ef6\u5199 1000 \u884c\u6ca1\u6709\u4efb\u4f55\u81ea\u89c9'. This case tests whether review-board, given the full file and consuming components, catches the separation-of-concerns violation."
       }
+    },
+    {
+      "id": "bun-server-startup",
+      "fixture": "fixtures/bun-server-startup",
+      "scope": "Review the just-written files in fixtures/bun-server-startup/: a Bun HTTP server entry point (server.ts) and the shared constants module it imports (constants.excerpt.ts).",
+      "should_flag": true,
+      "expected_findings": [
+        {
+          "category": "magic value",
+          "claim": "server.ts imports PORT_DIR, PORT_FILE, DEFAULT_PORT, and IDLE_TIMEOUT_MS from the shared constants module, but hardcodes the environment variable names `LOTRA_DEV` (compared against the magic string `\"1\"` to toggle dev mode) and `LOTRA_CWD` (used to override the working directory) as inline string literals. These are project-level configuration identifiers that belong in constants.ts alongside the other four exports, so that all config is defined in one place and a rename touches one file instead of requiring a grep.",
+          "must_reference": [
+            "LOTRA_DEV",
+            "constants.excerpt.ts"
+          ]
+        }
+      ],
+      "forbidden_findings": [
+        "Do not approve the inline env var names as fine because 'env var access is inherently string-based' \u2014 the project already centralizes other string-based identifiers (PORT_DIR, PORT_FILE) in a constants module; these should follow the same pattern.",
+        "Do not reduce this to a generic 'consider extracting strings to constants' suggestion without calling out the specific inconsistency: four config values are already centralized while two env var names in the same file are not."
+      ],
+      "expected_min_confidence": 50,
+      "grading": "PASS when review-board output, from any reviewer, flags that the env var names LOTRA_DEV and/or LOTRA_CWD are hardcoded magic strings while other configuration is centralized in the shared constants module, and recommends centralizing them, at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Approving the code, reporting no issues, or only suggesting generic clean-up without noting the inconsistency with the constants module, is FAIL.",
+      "origin": {
+        "repo": "lotra",
+        "session": "manual-identification",
+        "expected_reviewer": "craft-reviewer",
+        "note": "server.ts centralizes four config values by importing them from ../shared/constants.ts, but leaves two env var names (LOTRA_DEV, LOTRA_CWD) as inline magic strings. The inconsistency is a maintenance hazard: if the env var is renamed in constants or docs, the hardcoded string in server.ts silently diverges. Identified by manual review of the server entry point."
+      }
     }
   ]
 }

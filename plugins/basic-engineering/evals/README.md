@@ -42,3 +42,4 @@ fixture 是「刚写好的改动」的快照,**不能泄露答案**:不要在 fi
 - **slide-easing-claim** — 不给 intent。fixture 含 `Slide.swift` 与 `PlayheadChordView.excerpt.swift`。期望命中与来历见 `cases.json`。
 - **tailwind-handwritten-sidebar** — 给 intent。fixture 含 `Sidebar.tsx`、`style.css`、`package.excerpt.json`。期望命中与来历见 `cases.json`。
 - **monolith-stylesheet** — 不给 intent。fixture 含 `style.css`(1068 行,6 个组件的样式)和 3 个消费组件 excerpt。期望命中与来历见 `cases.json`。
+- **bun-server-startup** — 不给 intent。fixture 含 `server.ts`(Bun HTTP 服务入口)和 `constants.excerpt.ts`(共享常量模块)。期望命中与来历见 `cases.json`。
