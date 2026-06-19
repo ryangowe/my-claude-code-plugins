@@ -11,6 +11,19 @@ description: Review the current change by fanning out to every available *-revie
 
 所有以 `-reviewer` 结尾的 agent 都是潜在的 reviewer。
 
+不在上述列表中的 reviewer（用户仓库自定义的）以 `model: sonnet` 调用。
+
+模型分配（调用 Agent 时必须通过 `model` 参数显式传入，frontmatter 的 `model:` 字段因 [claude-code#43869](https://github.com/anthropics/claude-code/issues/43869) 不生效）:
+
+| reviewer           | model 参数 |
+| ------------------ | ---------- |
+| craft-reviewer     | opus       |
+| structure-reviewer | opus       |
+| reuse-reviewer     | opus       |
+| change-reviewer    | sonnet     |
+| sanity-reviewer    | haiku      |
+| comment-reviewer   | haiku      |
+
 ## Step 2 - 确定 review 范围
 
 review 范围可能是:
@@ -23,7 +36,9 @@ review 范围可能是:
 
 ## Step 3 - 发起 review
 
-并行调用所有 reviewer,传入 review 范围和改动内容
+并行调用所有 reviewer。
+
+**不要省略 `model` 参数。** agent frontmatter 里的 `model:` 字段不生效（[#43869](https://github.com/anthropics/claude-code/issues/43869)），subagent 会静默继承父会话模型。你必须在每个 Agent 调用里显式传 `model` 参数，值从上面的模型分配表查。不在表中的自定义 reviewer 传 `model: sonnet`。
 
 ## Step 4 - Filter, dedupe, and rank
 
