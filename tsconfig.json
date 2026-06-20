@@ -3,6 +3,12 @@
   "references": [
     {
       "path": "plugins/anti-cheat"
+    },
+    {
+      "path": "plugins/basic-engineering"
+    },
+    {
+      "path": "plugins/python-engineering"
     }
   ]
 }
