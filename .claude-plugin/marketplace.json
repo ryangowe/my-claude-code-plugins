@@ -20,6 +20,10 @@
     {
       "name": "basic-engineering",
       "source": "./plugins/basic-engineering"
+    },
+    {
+      "name": "project-management",
+      "source": "./plugins/project-management"
     }
   ]
 }

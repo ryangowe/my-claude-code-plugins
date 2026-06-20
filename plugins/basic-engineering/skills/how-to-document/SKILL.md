@@ -7,6 +7,8 @@ description: Load when writing or updating documentation files (README, guides, 
 
 写代码注释和 docstring 请 Load how-to-comment。本 skill 管的是独立的文档文件。
 
+如果有更具体的文档类型 skill（如 create-issue、create-spec），以该 skill 的规范为准；本 skill 仅提供通用的写作原则和兜底骨架。
+
 各类文档的骨架示例见 reference 目录：
 
 - [reference/readme.md](reference/readme.md) — README 骨架（React、Node.js 风格）

@@ -1,0 +1,13 @@
+{
+  "name": "project-management",
+  "description": "Issue tracking and design spec skills \u2014 create structured issues and specs from conversation.",
+  "author": {
+    "name": "ryangowe"
+  },
+  "keywords": [
+    "issue",
+    "spec",
+    "design-doc",
+    "project-management"
+  ]
+}
