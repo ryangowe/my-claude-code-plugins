@@ -4,7 +4,7 @@ import { readStdin, createHookHandler } from './common.js';
 const HEDGE_CONJUNCTIONS = new Set([
   'but', 'however', 'nevertheless', 'nonetheless', 'yet',
   'although', 'though', 'whereas', 'while',
-  '不过', '但是', '但', '然而', '却', '虽然', '尽管',
+  '不过', '但是', '但', '然而', '却', '虽然', '尽管', '——',
 ]);
 const CLAUSE_SEPARATORS = new Set([',', '，', ';', '；']);
 const SENTENCE_TERMINATORS = new Set(['.', '。', '!', '！', '?', '？']);
