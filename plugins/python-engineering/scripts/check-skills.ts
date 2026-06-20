@@ -80,8 +80,18 @@ async function main(): Promise<void> {
   const missing = missingSkills(required, loadedSkills(input.transcript_path));
   if (missing.length === 0) return;
 
-  process.stderr.write(`Load skill before editing: ${missing.join(', ')}\n`);
-  process.exit(2);
+  const skillList = missing.map(s => `  Skill({ skill: "${s}" })`).join('\n');
+  const output = {
+    hookSpecificOutput: {
+      hookEventName: 'PreToolUse',
+      permissionDecision: 'deny',
+      permissionDecisionReason: `Missing skill: ${missing.join(', ')}`,
+      additionalContext:
+        `Before editing this file, load the required skill(s) using the Skill tool:\n${skillList}\n` +
+        'Do NOT read the SKILL.md file directly — use the Skill tool so the load is recorded in the transcript.',
+    },
+  };
+  console.log(JSON.stringify(output));
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
