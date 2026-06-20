@@ -3,7 +3,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as os from 'node:os';
 import { capturePath, appendCapture } from './common.js';
-import { detect, splitClauses, isHedging, blockDecision, run } from './detect-hedging.js';
+import { detect, splitClauses, isHedging, blockDecision, run, type Clause } from './detect-hedging.js';
 
 let tmpDir: string;
 
@@ -28,15 +28,19 @@ function makeTranscript(assistantText: string): string {
 
 // -- splitClauses -------------------------------------------------------------
 
+function texts(clauses: Clause[]): string[] {
+  return clauses.map(c => c.text);
+}
+
 describe('splitClauses', () => {
   it('splits on ascii comma', () => {
-    expect(splitClauses('it works, but slowly')).toEqual(['it works', 'but slowly']);
+    expect(texts(splitClauses('it works, but slowly'))).toEqual(['it works', 'but slowly']);
   });
 
   it('splits on fullwidth comma', () => {
     const clauses = splitClauses('可以，但是不太好');
     expect(clauses.length).toBe(2);
-    expect(clauses[0].trim()).toBe('可以');
+    expect(clauses[0].text.trim()).toBe('可以');
   });
 
   it('splits on semicolons', () => {
@@ -44,11 +48,32 @@ describe('splitClauses', () => {
   });
 
   it('drops empty clauses', () => {
-    expect(splitClauses(',, hello ,')).toEqual(['hello']);
+    expect(texts(splitClauses(',, hello ,'))).toEqual(['hello']);
   });
 
   it('returns whole text when no separator', () => {
-    expect(splitClauses('no separators here')).toEqual(['no separators here']);
+    expect(texts(splitClauses('no separators here'))).toEqual(['no separators here']);
+  });
+
+  it('splits on sentence terminators', () => {
+    const clauses = splitClauses('OK。但要注意');
+    expect(clauses.length).toBe(2);
+    expect(clauses[1].text).toBe('但要注意');
+  });
+
+  it('marks first clause as sentenceStart', () => {
+    const clauses = splitClauses('but maybe');
+    expect(clauses[0].sentenceStart).toBe(true);
+  });
+
+  it('marks clause after comma as not sentenceStart', () => {
+    const clauses = splitClauses('it works, but slowly');
+    expect(clauses[1].sentenceStart).toBe(false);
+  });
+
+  it('marks clause after period as sentenceStart', () => {
+    const clauses = splitClauses('Done. But wait');
+    expect(clauses[1].sentenceStart).toBe(true);
   });
 });
 
@@ -65,6 +90,16 @@ describe('isHedging', () => {
     expect(isHedging('this is a perfectly reasonable clause but it has many words in it overall')).toBe(false);
   });
   it('clean clause returns false', () => expect(isHedging('the API returns JSON')).toBe(false));
+
+  it('skips leading conjunction when sentenceStart is true', () => {
+    expect(isHedging('but it may vary', true)).toBe(false);
+    expect(isHedging('但是不确定', true)).toBe(false);
+    expect(isHedging('However this works', true)).toBe(false);
+  });
+
+  it('still flags mid-clause conjunction even when sentenceStart', () => {
+    expect(isHedging('it works but maybe not', true)).toBe(true);
+  });
 });
 
 // -- detect -------------------------------------------------------------------
@@ -86,6 +121,18 @@ describe('detect', () => {
 
   it('chinese hedging', () => {
     expect(detect('这个方法可以，但是效果不太好').flagged_clauses.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('does not flag sentence-initial conjunction', () => {
+    expect(detect('但这个方法有限制').flagged_clauses).toEqual([]);
+  });
+
+  it('does not flag conjunction after sentence terminator', () => {
+    expect(detect('很好。但要注意').flagged_clauses).toEqual([]);
+  });
+
+  it('still flags conjunction after comma in chinese', () => {
+    expect(detect('可以，但不好').flagged_clauses.length).toBe(1);
   });
 });
 

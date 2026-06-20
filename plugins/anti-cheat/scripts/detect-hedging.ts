@@ -7,39 +7,61 @@ const HEDGE_CONJUNCTIONS = new Set([
   '不过', '但是', '但', '然而', '却', '虽然', '尽管',
 ]);
 const CLAUSE_SEPARATORS = new Set([',', '，', ';', '；']);
+const SENTENCE_TERMINATORS = new Set(['.', '。', '!', '！', '?', '？']);
 const MAX_WORD_COUNT = 10;
 
 const segmenter = new Intl.Segmenter('zh-CN', { granularity: 'word' });
+
+export interface Clause {
+  text: string;
+  sentenceStart: boolean;
+}
 
 export interface DetectResult {
   flagged_clauses: string[];
 }
 
-export function splitClauses(text: string): string[] {
-  const clauses: string[] = [];
+export function splitClauses(text: string): Clause[] {
+  const clauses: Clause[] = [];
   let current: string[] = [];
+  let sentenceStart = true;
   for (const seg of segmenter.segment(text)) {
-    if (CLAUSE_SEPARATORS.has(seg.segment.trim())) {
+    const trimmed = seg.segment.trim();
+    if (CLAUSE_SEPARATORS.has(trimmed)) {
       const clause = current.join('').trim();
-      if (clause) clauses.push(clause);
+      if (clause) clauses.push({ text: clause, sentenceStart });
       current = [];
+      sentenceStart = false;
+    } else if (SENTENCE_TERMINATORS.has(trimmed) || trimmed === '\n') {
+      const clause = current.join('').trim();
+      if (clause) clauses.push({ text: clause, sentenceStart });
+      current = [];
+      sentenceStart = true;
     } else {
       current.push(seg.segment);
     }
   }
   const tail = current.join('').trim();
-  if (tail) clauses.push(tail);
+  if (tail) clauses.push({ text: tail, sentenceStart });
   return clauses;
 }
 
-export function isHedging(clause: string): boolean {
+export function isHedging(clause: string, sentenceStart = false): boolean {
   const segments = Array.from(segmenter.segment(clause));
-  if (segments.filter(s => s.isWordLike).length >= MAX_WORD_COUNT) return false;
+  const words = segments.filter(s => s.isWordLike);
+  if (words.length >= MAX_WORD_COUNT) return false;
+  if (sentenceStart) {
+    const first = words[0]?.segment.trim().toLowerCase();
+    if (first && HEDGE_CONJUNCTIONS.has(first)) return false;
+  }
   return segments.some(s => HEDGE_CONJUNCTIONS.has(s.segment.trim().toLowerCase()));
 }
 
 export function detect(text: string): DetectResult {
-  return { flagged_clauses: splitClauses(text).filter(isHedging) };
+  const flagged = splitClauses(text)
+    .filter(c => isHedging(c.text, c.sentenceStart))
+    .map(c => c.text);
+  return { flagged_clauses: flagged };
 }
 
 export function blockDecision(result: DetectResult | undefined): { decision: string; reason: string } | null {
