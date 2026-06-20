@@ -9,7 +9,7 @@
       "should_flag": true,
       "expected_findings": [
         {
-          "category": "\u63a5\u53e3\u5fc5\u8981\u6027",
+          "category": "接口必要性",
           "claim": "The `inSeconds` interface (Duration.inSeconds) need not exist. Read its call sites in MockDetector (timingSigma, onBeatHit, freeHit): every use converts a Duration to Double seconds and immediately wraps the result back into a Duration via `.seconds(...)`. The callers only ever do Duration-to-Duration arithmetic (scale by a factor, add, clamp), so the intermediate Double-seconds representation the interface exposes is unnecessary; the extension should be removed and the call sites should operate on Duration directly.",
           "must_reference": [
             "inSeconds",
@@ -18,27 +18,27 @@
         }
       ],
       "forbidden_findings": [
-        "Do not approve the helper as fine just because `inSeconds` reads as a clean one-line property in isolation \u2014 its redundancy is only visible from how the call sites use it.",
+        "Do not approve the helper as fine just because `inSeconds` reads as a clean one-line property in isolation — its redundancy is only visible from how the call sites use it.",
         "Do not reduce it to a file-placement / separation-of-concerns nit (e.g. 'move the extension elsewhere') without questioning whether the interface should exist at all."
       ],
       "expected_min_confidence": 50,
-      "grading": "PASS when review-board output, from any reviewer, raises that the `inSeconds` interface need not exist \u2014 its callers round-trip Duration -> Double -> Duration and only need Duration arithmetic, so the extension should be removed \u2014 at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Approving the helper, reporting no structure issue, or only nitpicking its file placement without questioning its existence, is FAIL.",
+      "grading": "PASS when review-board output, from any reviewer, raises that the `inSeconds` interface need not exist — its callers round-trip Duration -> Double -> Duration and only need Duration arithmetic, so the extension should be removed — at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Approving the helper, reporting no structure issue, or only nitpicking its file placement without questioning its existence, is FAIL.",
       "origin": {
         "repo": "clean-chord-app",
         "session": "4c3db99c-23e2-4a26-a1a7-68fda3a6f4d3.jsonl",
         "expected_reviewer": "structure-reviewer",
-        "note": "review-board fanned out to 5 reviewers; all missed this. reuse-reviewer was correct in its own lens (the stdlib has no Double-seconds accessor); the miss is structural \u2014 the interface is unnecessary given its call sites. The human questioned it (L142), which led to deleting the file (L164) and rewriting 3 call sites to use Duration operators directly (L171-177). This case is the reconstructed false negative; intent is withheld so the reviewer must derive the interface's necessity from usage."
+        "note": "review-board fanned out to 5 reviewers; all missed this. reuse-reviewer was correct in its own lens (the stdlib has no Double-seconds accessor); the miss is structural — the interface is unnecessary given its call sites. The human questioned it (L142), which led to deleting the file (L164) and rewriting 3 call sites to use Duration operators directly (L171-177). This case is the reconstructed false negative; intent is withheld so the reviewer must derive the interface's necessity from usage."
       }
     },
     {
       "id": "slide-easing-claim",
       "fixture": "fixtures/slide-easing-claim",
-      "scope": "Review the just-edited docstring on `enum Slide` in fixtures/slide-easing-claim/Slide.swift. The PlayheadChordView.excerpt.swift file in the same directory is the only call site \u2014 read it to see how `Slide.transition` and `Slide.duration` are actually used.",
+      "scope": "Review the just-edited docstring on `enum Slide` in fixtures/slide-easing-claim/Slide.swift. The PlayheadChordView.excerpt.swift file in the same directory is the only call site — read it to see how `Slide.transition` and `Slide.duration` are actually used.",
       "should_flag": true,
       "expected_findings": [
         {
-          "category": "\u8fc7\u65f6",
-          "claim": "The final docstring line `One-shot; symmetric easeInOut over duration.` is wrong as written: it asserts that the `Slide.transition(distance:)` primitive guarantees an easeInOut curve over `Slide.duration`, but the function body only composes `.asymmetric(.offset.combined(.opacity))` \u2014 it sets no animation curve and never references `duration`. The easeInOut + duration pairing lives at the call site (`.animation(.easeInOut(duration: Slide.duration), value: ...)` in PlayheadChordView.excerpt.swift), so the docstring is documenting a contract the type does not enforce.",
+          "category": "过时",
+          "claim": "The final docstring line `One-shot; symmetric easeInOut over duration.` is wrong as written: it asserts that the `Slide.transition(distance:)` primitive guarantees an easeInOut curve over `Slide.duration`, but the function body only composes `.asymmetric(.offset.combined(.opacity))` — it sets no animation curve and never references `duration`. The easeInOut + duration pairing lives at the call site (`.animation(.easeInOut(duration: Slide.duration), value: ...)` in PlayheadChordView.excerpt.swift), so the docstring is documenting a contract the type does not enforce.",
           "must_reference": [
             "easeInOut",
             "Slide.swift",
@@ -47,7 +47,7 @@
         }
       ],
       "forbidden_findings": [
-        "Do not approve the docstring as accurate by treating `easeInOut`/`duration` as 'implied by the caller' or 'acceptable convention' \u2014 the docstring states it as the primitive's own behavior.",
+        "Do not approve the docstring as accurate by treating `easeInOut`/`duration` as 'implied by the caller' or 'acceptable convention' — the docstring states it as the primitive's own behavior.",
         "Do not reduce this to a wording / 'could be shorter' nit without flagging that the easing claim is unbacked by the code."
       ],
       "expected_min_confidence": 60,
@@ -67,7 +67,7 @@
       "should_flag": true,
       "expected_findings": [
         {
-          "category": "\u7b2c\u4e09\u65b9\u5e93",
+          "category": "第三方库",
           "claim": "Tailwind CSS is imported at line 1 of style.css (`@import \"tailwindcss\"`) and listed as a dependency in package.excerpt.json, but zero Tailwind utility classes appear anywhere in the codebase. The entire stylesheet (100+ rules) hand-writes properties that Tailwind utility classes directly provide: `display: flex` / `align-items: center` / `gap` / `padding` / `border-radius` / `font-size` / `font-weight` / `color` / `border` / `cursor` / `overflow` / `text-overflow`. The Sidebar component should apply Tailwind classes in JSX (`className=\"flex items-center gap-2 ...\"`) instead of maintaining a parallel hand-written stylesheet.",
           "must_reference": [
             "tailwindcss",
@@ -77,16 +77,16 @@
         }
       ],
       "forbidden_findings": [
-        "Do not approve the hand-written CSS as necessary 'custom design-system work' or 'styles that go beyond Tailwind' \u2014 the rules use standard layout, spacing, typography, and color properties that are Tailwind's core utility surface.",
+        "Do not approve the hand-written CSS as necessary 'custom design-system work' or 'styles that go beyond Tailwind' — the rules use standard layout, spacing, typography, and color properties that are Tailwind's core utility surface.",
         "Do not reduce this to 'could sprinkle in some Tailwind classes' without flagging that the entire stylesheet systematically bypasses the imported framework."
       ],
       "expected_min_confidence": 60,
-      "grading": "PASS when review-board output, from any reviewer, flags that Tailwind is imported and installed but completely unused \u2014 the CSS hand-writes utilities (flex, padding, gap, border-radius, font-size, color, etc.) that Tailwind provides \u2014 and recommends using Tailwind utility classes in JSX instead, at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Concluding 'no reuse issues', or only noting minor opportunities without flagging the systematic bypass of the imported framework, is FAIL.",
+      "grading": "PASS when review-board output, from any reviewer, flags that Tailwind is imported and installed but completely unused — the CSS hand-writes utilities (flex, padding, gap, border-radius, font-size, color, etc.) that Tailwind provides — and recommends using Tailwind utility classes in JSX instead, at confidence >= expected_min_confidence, AND the report contains none of forbidden_findings. Concluding 'no reuse issues', or only noting minor opportunities without flagging the systematic bypass of the imported framework, is FAIL.",
       "origin": {
         "repo": "lotra",
         "session": "8ea13de3-b5b3-45c2-b785-df5a46e465d6.jsonl",
         "expected_reviewer": "reuse-reviewer",
-        "note": "The React SPA rewrite (commit 20de1cc) added `@import \"tailwindcss\"` and tailwindcss to package.json, then wrote 1068 lines of hand-written CSS in a single file. review-board ran twice across sessions 8ea13de3 and 54d82525 with 5\u20136 reviewers each time (9 findings, then 17, then 13); none flagged that Tailwind was imported but unused \u2014 all findings targeted JS logic (XSS, dead code, race conditions). reuse-reviewer checked for standard-lib and third-party alternatives to JS utilities but never examined the CSS against the project's own installed styling framework. The user eventually asked (session 3694fb99, L797) 'css \u4e3a\u4ec0\u4e48\u8fd9\u4e48\u957f' and (L833) 'Tailwind \u5e94\u8be5\u5f88\u65e9\u5c31\u63a5\u5165\u4e86\u3002\u4e3a\u4ec0\u4e48\u5230\u73b0\u5728\u90fd\u6ca1\u6709\u7f16\u8bd1\u51fa\u6765', leading to the discovery that Tailwind had never been compiled (missing bun-plugin-tailwind and bunfig.toml) and the entire CSS was hand-written. Further, the dependency was added in the same commit but only half-integrated \u2014 `@import` present, build pipeline absent. This case reconstructs the reuse false negative; the fixture includes the framework import and dependency to test whether the reviewer catches the systematic bypass."
+        "note": "The React SPA rewrite (commit 20de1cc) added `@import \"tailwindcss\"` and tailwindcss to package.json, then wrote 1068 lines of hand-written CSS in a single file. review-board ran twice across sessions 8ea13de3 and 54d82525 with 5–6 reviewers each time (9 findings, then 17, then 13); none flagged that Tailwind was imported but unused — all findings targeted JS logic (XSS, dead code, race conditions). reuse-reviewer checked for standard-lib and third-party alternatives to JS utilities but never examined the CSS against the project's own installed styling framework. The user eventually asked (session 3694fb99, L797) 'css 为什么这么长' and (L833) 'Tailwind 应该很早就接入了。为什么到现在都没有编译出来', leading to the discovery that Tailwind had never been compiled (missing bun-plugin-tailwind and bunfig.toml) and the entire CSS was hand-written. Further, the dependency was added in the same commit but only half-integrated — `@import` present, build pipeline absent. This case reconstructs the reuse false negative; the fixture includes the framework import and dependency to test whether the reviewer catches the systematic bypass."
       }
     },
     {
@@ -96,8 +96,8 @@
       "should_flag": true,
       "expected_findings": [
         {
-          "category": "\u5173\u6ce8\u70b9\u5206\u79bb",
-          "claim": "A single global style.css contains all UI styles for 6 unrelated component concerns \u2014 sidebar navigation, document reading area with serif typography, comment cards with markdown body, status badge controls, floating submit panel, and toast notifications \u2014 separated only by section-marker comments (`/* ===== SIDEBAR ===== */`, `/* ===== COMMENT CARDS ===== */`, etc.). Each concern corresponds to a separate React component (Sidebar, ReadingArea, CommentCard, StatusMenu, SubmitFloat) but all share one monolith file imported once in App. Styles should be co-located with their components (CSS Modules, component-scoped files, or at minimum one stylesheet per component family) so that each module owns its own styles.",
+          "category": "关注点分离",
+          "claim": "A single global style.css contains all UI styles for 6 unrelated component concerns — sidebar navigation, document reading area with serif typography, comment cards with markdown body, status badge controls, floating submit panel, and toast notifications — separated only by section-marker comments (`/* ===== SIDEBAR ===== */`, `/* ===== COMMENT CARDS ===== */`, etc.). Each concern corresponds to a separate React component (Sidebar, ReadingArea, CommentCard, StatusMenu, SubmitFloat) but all share one monolith file imported once in App. Styles should be co-located with their components (CSS Modules, component-scoped files, or at minimum one stylesheet per component family) so that each module owns its own styles.",
           "must_reference": [
             "style.css",
             "App.excerpt.tsx"
@@ -105,7 +105,7 @@
         }
       ],
       "forbidden_findings": [
-        "Do not approve the monolith as acceptable 'because CSS is inherently global' or 'section comments provide enough structure' \u2014 the project already uses per-file React components, so per-component styles are the natural corollary.",
+        "Do not approve the monolith as acceptable 'because CSS is inherently global' or 'section comments provide enough structure' — the project already uses per-file React components, so per-component styles are the natural corollary.",
         "Do not reduce this to a file-length nitpick without identifying the separation-of-concerns violation: 6 independent component concerns in one file."
       ],
       "expected_min_confidence": 50,
@@ -114,7 +114,7 @@
         "repo": "lotra",
         "session": "3694fb99-8ec8-492b-a629-a41a443782ce.jsonl",
         "expected_reviewer": "structure-reviewer",
-        "note": "Same incident as tailwind-handwritten-sidebar. The 1068-line style.css served 6 component concerns in one global file. review-board ran on individual component diffs (Sidebar.tsx, useComments.ts, ReadingArea.tsx) but never reviewed style.css as a whole \u2014 each reviewer saw only the TSX diff for a single component. When the user asked (L797) 'css \u4e3a\u4ec0\u4e48\u8fd9\u4e48\u957f', the assistant's own breakdown showed 6 distinct sections (sidebar 27%, comments 32%, reading area 21%, themes 5%, submit 8%, reset 5%). No reviewer flagged the monolith because none was scoped to see the full file. The user's reaction (L815): '\u4e3a\u4ec0\u4e48 reviewer \u6ca1\u6709\u68c0\u67e5\u8fd9\u4e2a\u3002\u4ee5\u53ca\u4f60\u81ea\u5df1\u4e3a\u4ec0\u4e48\u5bf9\u4e00\u4e2a\u6587\u4ef6\u5199 1000 \u884c\u6ca1\u6709\u4efb\u4f55\u81ea\u89c9'. This case tests whether review-board, given the full file and consuming components, catches the separation-of-concerns violation."
+        "note": "Same incident as tailwind-handwritten-sidebar. The 1068-line style.css served 6 component concerns in one global file. review-board ran on individual component diffs (Sidebar.tsx, useComments.ts, ReadingArea.tsx) but never reviewed style.css as a whole — each reviewer saw only the TSX diff for a single component. When the user asked (L797) 'css 为什么这么长', the assistant's own breakdown showed 6 distinct sections (sidebar 27%, comments 32%, reading area 21%, themes 5%, submit 8%, reset 5%). No reviewer flagged the monolith because none was scoped to see the full file. The user's reaction (L815): '为什么 reviewer 没有检查这个。以及你自己为什么对一个文件写 1000 行没有任何自觉'. This case tests whether review-board, given the full file and consuming components, catches the separation-of-concerns violation."
       }
     },
     {
@@ -133,7 +133,7 @@
         }
       ],
       "forbidden_findings": [
-        "Do not approve the inline env var names as fine because 'env var access is inherently string-based' \u2014 the project already centralizes other string-based identifiers (PORT_DIR, PORT_FILE) in a constants module; these should follow the same pattern.",
+        "Do not approve the inline env var names as fine because 'env var access is inherently string-based' — the project already centralizes other string-based identifiers (PORT_DIR, PORT_FILE) in a constants module; these should follow the same pattern.",
         "Do not reduce this to a generic 'consider extracting strings to constants' suggestion without calling out the specific inconsistency: four config values are already centralized while two env var names in the same file are not."
       ],
       "expected_min_confidence": 50,

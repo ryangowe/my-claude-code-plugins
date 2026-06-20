@@ -4,7 +4,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u5e2e\u6211\u5199\u4e00\u4efd\u8bbe\u8ba1\u6587\u6863\uff0c\u63cf\u8ff0\u6211\u4eec\u8981\u628a\u5355\u4f53\u5e94\u7528\u62c6\u6210\u5fae\u670d\u52a1\u7684\u65b9\u6848\u3002\u9700\u8981\u5305\u542b\u52a8\u673a\u3001\u65b9\u6848\u5bf9\u6bd4\u3001\u98ce\u9669\u8bc4\u4f30",
+    "query": "帮我写一份设计文档，描述我们要把单体应用拆成微服务的方案。需要包含动机、方案对比、风险评估",
     "should_trigger": true
   },
   {
@@ -16,7 +16,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u6211\u4eec\u7684 API \u6587\u6863 docs/api-reference.md \u5df2\u7ecf\u4e25\u91cd\u8fc7\u65f6\u4e86\uff0c\u6709\u4e9b endpoint \u5df2\u7ecf\u5220\u4e86\u4f46\u6587\u6863\u91cc\u8fd8\u5728\u3002\u5e2e\u6211\u628a\u5b83\u548c\u5b9e\u9645\u7684 routes \u5bf9\u9f50",
+    "query": "我们的 API 文档 docs/api-reference.md 已经严重过时了，有些 endpoint 已经删了但文档里还在。帮我把它和实际的 routes 对齐",
     "should_trigger": true
   },
   {
@@ -36,7 +36,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u5e2e\u6211\u5199\u4e00\u4e2a Python \u51fd\u6570\uff0c\u4ece\u6570\u636e\u5e93\u8bfb\u53d6\u7528\u6237\u5217\u8868\uff0c\u6309\u6ce8\u518c\u65f6\u95f4\u6392\u5e8f\uff0c\u8fd4\u56de\u5206\u9875\u7ed3\u679c",
+    "query": "帮我写一个 Python 函数，从数据库读取用户列表，按注册时间排序，返回分页结果",
     "should_trigger": false
   },
   {
@@ -48,7 +48,7 @@
     "should_trigger": false
   },
   {
-    "query": "\u5e2e\u6211\u91cd\u6784 utils/helpers.py\uff0c\u628a\u91cc\u9762\u6df7\u5728\u4e00\u8d77\u7684\u5b57\u7b26\u4e32\u5904\u7406\u3001\u65e5\u671f\u5904\u7406\u51fd\u6570\u62c6\u5230\u4e0d\u540c\u7684\u6a21\u5757\u91cc",
+    "query": "帮我重构 utils/helpers.py，把里面混在一起的字符串处理、日期处理函数拆到不同的模块里",
     "should_trigger": false
   },
   {

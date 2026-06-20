@@ -4,7 +4,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u5e2e\u6211\u7ed9\u8fd9\u4e2a attention mechanism \u7684\u5b9e\u73b0\u52a0\u4e0a shape \u6ce8\u91ca\u3002\u8f93\u5165\u662f queries [B,T,D] \u548c keys [B,T,D]\uff0c\u4e2d\u95f4\u6709 transpose \u548c matmul\uff0c\u6700\u540e\u8f93\u51fa [B,T,T] \u7684 scores",
+    "query": "帮我给这个 attention mechanism 的实现加上 shape 注释。输入是 queries [B,T,D] 和 keys [B,T,D]，中间有 transpose 和 matmul，最后输出 [B,T,T] 的 scores",
     "should_trigger": true
   },
   {
@@ -16,7 +16,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u6211\u5728\u5199\u4e00\u4e2a numpy \u51fd\u6570\u5904\u7406\u4f20\u611f\u5668\u6570\u636e\uff0c\u8f93\u5165\u662f timestamps [N] \u548c measurements [N, K] \uff08K \u4e2a\u4f20\u611f\u5668\uff09\uff0c\u8f93\u51fa\u662f interpolated [M, K]\u3002\u600e\u4e48\u5728 docstring \u91cc\u6807\u6ce8\u8fd9\u4e9b shape\uff1f",
+    "query": "我在写一个 numpy 函数处理传感器数据，输入是 timestamps [N] 和 measurements [N, K] （K 个传感器），输出是 interpolated [M, K]。怎么在 docstring 里标注这些 shape？",
     "should_trigger": true
   },
   {
@@ -32,7 +32,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u5e2e\u6211\u7ed9\u8fd9\u4e2a KNN \u641c\u7d22\u51fd\u6570\u5199 docstring\uff0c\u5b83\u63a5\u53d7 query_points [Q,3] \u548c reference_points [R,3]\uff0c\u8fd4\u56de distances [Q,K] \u548c indices [Q,K]",
+    "query": "帮我给这个 KNN 搜索函数写 docstring，它接受 query_points [Q,3] 和 reference_points [R,3]，返回 distances [Q,K] 和 indices [Q,K]",
     "should_trigger": true
   },
   {
@@ -40,7 +40,7 @@
     "should_trigger": false
   },
   {
-    "query": "\u5e2e\u6211\u5199\u4e00\u4e2a REST API endpoint\uff0c\u63a5\u6536 JSON payload \u5e76\u5b58\u5230 PostgreSQL \u6570\u636e\u5e93",
+    "query": "帮我写一个 REST API endpoint，接收 JSON payload 并存到 PostgreSQL 数据库",
     "should_trigger": false
   },
   {
@@ -64,7 +64,7 @@
     "should_trigger": false
   },
   {
-    "query": "\u5e2e\u6211\u4f18\u5316\u8fd9\u4e2a pandas DataFrame \u64cd\u4f5c\u7684\u6027\u80fd\uff0c\u5f53\u524d\u5904\u7406 100 \u4e07\u884c\u6570\u636e\u9700\u8981 30 \u79d2",
+    "query": "帮我优化这个 pandas DataFrame 操作的性能，当前处理 100 万行数据需要 30 秒",
     "should_trigger": false
   },
   {

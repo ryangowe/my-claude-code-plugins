@@ -1,6 +1,6 @@
 [
   {
-    "query": "\u5e2e\u6211\u5199\u4e00\u4e2a Python \u51fd\u6570\u5904\u7406\u914d\u7f6e\u6587\u4ef6\u5408\u5e76\uff1abase config \u548c override config \u90fd\u662f\u5d4c\u5957 dict\uff0c\u9700\u8981\u6df1\u5ea6\u5408\u5e76\uff0coverride \u4f18\u5148",
+    "query": "帮我写一个 Python 函数处理配置文件合并：base config 和 override config 都是嵌套 dict，需要深度合并，override 优先",
     "should_trigger": true
   },
   {
@@ -12,7 +12,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u5e2e\u6211\u5b9e\u73b0\u4e00\u4e2a Python \u7684 LRU cache decorator\uff0c\u7c7b\u4f3c functools.lru_cache \u4f46\u652f\u6301 TTL \u8fc7\u671f\u3002\u9700\u8981\u7528\u5230 dataclasses \u548c proper dunder methods",
+    "query": "帮我实现一个 Python 的 LRU cache decorator，类似 functools.lru_cache 但支持 TTL 过期。需要用到 dataclasses 和 proper dunder methods",
     "should_trigger": true
   },
   {
@@ -28,7 +28,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u5e2e\u6211\u7528 Python \u5199\u4e00\u4e2a CLI \u5de5\u5177\uff0c\u89e3\u6790\u547d\u4ee4\u884c\u53c2\u6570\uff0c\u8bfb\u53d6 TOML \u914d\u7f6e\uff0c\u6267\u884c\u51e0\u79cd\u4e0d\u540c\u7684\u5b50\u547d\u4ee4\u3002\u4ee3\u7801\u8981\u89c4\u8303\u548c pythonic",
+    "query": "帮我用 Python 写一个 CLI 工具，解析命令行参数，读取 TOML 配置，执行几种不同的子命令。代码要规范和 pythonic",
     "should_trigger": true
   },
   {
@@ -56,7 +56,7 @@
     "should_trigger": false
   },
   {
-    "query": "\u5e2e\u6211\u5199\u4e00\u4e2a TypeScript \u7684\u8868\u5355\u9a8c\u8bc1\u5668\uff0c\u652f\u6301 email\u3001phone\u3001\u548c\u81ea\u5b9a\u4e49 regex \u89c4\u5219",
+    "query": "帮我写一个 TypeScript 的表单验证器，支持 email、phone、和自定义 regex 规则",
     "should_trigger": false
   },
   {

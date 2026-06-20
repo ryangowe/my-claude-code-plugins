@@ -4,7 +4,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u5e2e\u6211\u628a\u73b0\u5728\u7684\u5e73\u94fa\u76ee\u5f55\u7ed3\u6784\u91cd\u65b0\u7ec4\u7ec7\u6210 src layout\u3002\u5f53\u524d\u6240\u6709 .py \u6587\u4ef6\u90fd\u5728\u6839\u76ee\u5f55\u4e0b\uff0c\u9700\u8981\u62c6\u6210\u5408\u7406\u7684 package \u548c sub-package",
+    "query": "帮我把现在的平铺目录结构重新组织成 src layout。当前所有 .py 文件都在根目录下，需要拆成合理的 package 和 sub-package",
     "should_trigger": true
   },
   {
@@ -16,7 +16,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u5e2e\u6211\u914d\u7f6e tach \u6765\u5f3a\u5236 sub-package \u4e4b\u95f4\u7684\u4f9d\u8d56\u5173\u7cfb\u3002\u6211\u4eec\u6709 auth\u3001orders\u3001billing\u3001notifications \u56db\u4e2a sub-package\uff0c\u53ea\u5141\u8bb8\u5355\u5411\u4f9d\u8d56",
+    "query": "帮我配置 tach 来强制 sub-package 之间的依赖关系。我们有 auth、orders、billing、notifications 四个 sub-package，只允许单向依赖",
     "should_trigger": true
   },
   {
@@ -44,7 +44,7 @@
     "should_trigger": false
   },
   {
-    "query": "\u5e2e\u6211\u7ed9 TransformPipeline \u7c7b\u5199 docstring\uff0c\u8bf4\u660e\u6bcf\u4e2a\u65b9\u6cd5\u7684\u7528\u9014\u548c\u53c2\u6570",
+    "query": "帮我给 TransformPipeline 类写 docstring，说明每个方法的用途和参数",
     "should_trigger": false
   },
   {

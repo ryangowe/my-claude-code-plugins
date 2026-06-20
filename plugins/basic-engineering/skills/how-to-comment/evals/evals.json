@@ -4,7 +4,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u5e2e\u6211\u5b9e\u73b0\u4e00\u4e2a LRU cache\uff0c\u7528 Python \u7684 OrderedDict\u3002\u9700\u8981 get\u3001put\u3001evict \u65b9\u6cd5\uff0c\u652f\u6301 max_size \u53c2\u6570",
+    "query": "帮我实现一个 LRU cache，用 Python 的 OrderedDict。需要 get、put、evict 方法，支持 max_size 参数",
     "should_trigger": true
   },
   {
@@ -16,7 +16,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u5e2e\u6211\u91cd\u6784 data_loader.py\uff0c\u628a\u90a3\u4e2a 200 \u884c\u7684 load_and_transform \u51fd\u6570\u62c6\u6210\u51e0\u4e2a\u5c0f\u51fd\u6570\uff0c\u6bcf\u4e2a\u8d1f\u8d23\u4e00\u4e2a stage",
+    "query": "帮我重构 data_loader.py，把那个 200 行的 load_and_transform 函数拆成几个小函数，每个负责一个 stage",
     "should_trigger": true
   },
   {
@@ -28,7 +28,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u5e2e\u6211\u5199\u4e00\u4e2a Rust \u7684 CLI \u5de5\u5177\uff0c\u8bfb\u53d6 stdin \u7684 JSON lines\uff0c\u6309\u6307\u5b9a\u5b57\u6bb5 group by\uff0c\u8f93\u51fa\u6bcf\u7ec4\u7684 count \u548c sum",
+    "query": "帮我写一个 Rust 的 CLI 工具，读取 stdin 的 JSON lines，按指定字段 group by，输出每组的 count 和 sum",
     "should_trigger": true
   },
   {
@@ -64,7 +64,7 @@
     "should_trigger": false
   },
   {
-    "query": "\u5e2e\u6211\u770b\u770b CI \u4e3a\u4ec0\u4e48\u6302\u4e86\uff0c\u6700\u8fd1\u4e00\u6b21 GitHub Actions \u7684 log \u663e\u793a test_integration \u5931\u8d25",
+    "query": "帮我看看 CI 为什么挂了，最近一次 GitHub Actions 的 log 显示 test_integration 失败",
     "should_trigger": false
   },
   {

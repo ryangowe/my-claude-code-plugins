@@ -4,7 +4,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u5e2e\u6211\u6574\u7406\u4e00\u4e0b services/order_manager.py \u7684\u4ee3\u7801\u987a\u5e8f\uff0c\u73b0\u5728 private \u51fd\u6570\u6563\u843d\u5728 public \u51fd\u6570\u4e2d\u95f4\uff0c\u8fd8\u6709\u4e9b\u5e38\u91cf\u5b9a\u4e49\u5728\u6587\u4ef6\u6700\u5e95\u90e8\uff0c\u8bfb\u8d77\u6765\u5f88\u6df7\u4e71",
+    "query": "帮我整理一下 services/order_manager.py 的代码顺序，现在 private 函数散落在 public 函数中间，还有些常量定义在文件最底部，读起来很混乱",
     "should_trigger": true
   },
   {
@@ -16,7 +16,7 @@
     "should_trigger": true
   },
   {
-    "query": "\u5e2e\u6211\u8bbe\u8ba1 src/analytics/metrics.py \u7684\u7ed3\u6784\uff1a\u6709 MetricsCollector \u7c7b\uff08public\uff09\u3001\u51e0\u4e2a metric \u8ba1\u7b97\u51fd\u6570\uff08public\uff09\u3001\u4e00\u4e9b\u5185\u90e8\u7684\u805a\u5408\u8f85\u52a9\u51fd\u6570\u3001\u548c\u4e00\u5806\u5e38\u91cf\u3002\u7c7b\u5185\u90e8\u7684\u65b9\u6cd5\u6392\u5217\u4e5f\u9700\u8981\u89c4\u8303\u4e00\u4e0b",
+    "query": "帮我设计 src/analytics/metrics.py 的结构：有 MetricsCollector 类（public）、几个 metric 计算函数（public）、一些内部的聚合辅助函数、和一堆常量。类内部的方法排列也需要规范一下",
     "should_trigger": true
   },
   {
@@ -48,7 +48,7 @@
     "should_trigger": false
   },
   {
-    "query": "\u5e2e\u6211\u5199 pytest \u6d4b\u8bd5\u7528\u4f8b\u8986\u76d6 UserRepository \u7c7b\u7684 CRUD \u64cd\u4f5c",
+    "query": "帮我写 pytest 测试用例覆盖 UserRepository 类的 CRUD 操作",
     "should_trigger": false
   },
   {
@@ -68,7 +68,7 @@
     "should_trigger": false
   },
   {
-    "query": "\u5e2e\u6211\u628a\u8fd9\u4e2a 500 \u884c\u7684 utils.py \u62c6\u6210\u591a\u4e2a\u6a21\u5757\uff0c\u6309\u529f\u80fd\u5206\u7ec4",
+    "query": "帮我把这个 500 行的 utils.py 拆成多个模块，按功能分组",
     "should_trigger": true
   }
 ]
