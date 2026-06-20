@@ -26,10 +26,9 @@ repos:
           - mdformat-frontmatter==2.0.10
   - repo: local
     hooks:
-      - id: pytest
-        name: pytest
-        entry: pytest plugins
-        language: python
-        additional_dependencies: [pytest>=8, jieba]
+      - id: vitest
+        name: vitest
+        entry: bash -c ' for dir in plugins/anti-cheat plugins/basic-engineering plugins/python-engineering ; do (cd "$dir" && npx vitest run) || exit 1; done'
+        language: system
         pass_filenames: false
-        files: \.py$
+        files: \.ts$
