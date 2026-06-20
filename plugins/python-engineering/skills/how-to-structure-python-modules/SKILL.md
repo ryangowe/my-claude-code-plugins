@@ -1,6 +1,6 @@
 ---
 name: how-to-structure-python-modules
-description: Load when writing a new API
+description: Project-specific rules for organizing code inside a Python file — symbol ordering, class layout, constant placement. Load before creating or editing any .py file.
 ---
 
 # How to structure Python modules

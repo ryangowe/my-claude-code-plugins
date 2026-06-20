@@ -1,0 +1,74 @@
+[
+  {
+    "query": "update the README.md for our project - it still references the old API endpoints from v1 and the installation steps are wrong since we switched to Docker",
+    "should_trigger": true
+  },
+  {
+    "query": "\u5e2e\u6211\u5199\u4e00\u4efd\u8bbe\u8ba1\u6587\u6863\uff0c\u63cf\u8ff0\u6211\u4eec\u8981\u628a\u5355\u4f53\u5e94\u7528\u62c6\u6210\u5fae\u670d\u52a1\u7684\u65b9\u6848\u3002\u9700\u8981\u5305\u542b\u52a8\u673a\u3001\u65b9\u6848\u5bf9\u6bd4\u3001\u98ce\u9669\u8bc4\u4f30",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to create a CHANGELOG.md for our library. We've been doing releases without one and now users are complaining they don't know what changed between versions",
+    "should_trigger": true
+  },
+  {
+    "query": "write a getting-started guide for new developers joining the team - should cover local setup, how to run tests, how to deploy to staging. Put it in docs/onboarding.md",
+    "should_trigger": true
+  },
+  {
+    "query": "\u6211\u4eec\u7684 API \u6587\u6863 docs/api-reference.md \u5df2\u7ecf\u4e25\u91cd\u8fc7\u65f6\u4e86\uff0c\u6709\u4e9b endpoint \u5df2\u7ecf\u5220\u4e86\u4f46\u6587\u6863\u91cc\u8fd8\u5728\u3002\u5e2e\u6211\u628a\u5b83\u548c\u5b9e\u9645\u7684 routes \u5bf9\u9f50",
+    "should_trigger": true
+  },
+  {
+    "query": "create an architecture decision record (ADR) for why we chose PostgreSQL over MongoDB for the new analytics service",
+    "should_trigger": true
+  },
+  {
+    "query": "the docs/deployment.md file is getting really long (800 lines). Help me split it into separate guides for different environments and add a table of contents",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to update our project's specs/ directory with the new authentication flow - we're switching from session-based auth to OAuth2 with PKCE",
+    "should_trigger": true
+  },
+  {
+    "query": "set up a new Python project from scratch with README, project structure, and basic documentation",
+    "should_trigger": true
+  },
+  {
+    "query": "\u5e2e\u6211\u5199\u4e00\u4e2a Python \u51fd\u6570\uff0c\u4ece\u6570\u636e\u5e93\u8bfb\u53d6\u7528\u6237\u5217\u8868\uff0c\u6309\u6ce8\u518c\u65f6\u95f4\u6392\u5e8f\uff0c\u8fd4\u56de\u5206\u9875\u7ed3\u679c",
+    "should_trigger": false
+  },
+  {
+    "query": "fix the bug in the payment processing module - discounts are being applied twice when there are multiple coupon codes",
+    "should_trigger": false
+  },
+  {
+    "query": "write unit tests for the user registration flow covering email validation and password strength",
+    "should_trigger": false
+  },
+  {
+    "query": "\u5e2e\u6211\u91cd\u6784 utils/helpers.py\uff0c\u628a\u91cc\u9762\u6df7\u5728\u4e00\u8d77\u7684\u5b57\u7b26\u4e32\u5904\u7406\u3001\u65e5\u671f\u5904\u7406\u51fd\u6570\u62c6\u5230\u4e0d\u540c\u7684\u6a21\u5757\u91cc",
+    "should_trigger": false
+  },
+  {
+    "query": "create a Dockerfile for our FastAPI application with multi-stage builds and proper caching of pip dependencies",
+    "should_trigger": false
+  },
+  {
+    "query": "review the code changes in my PR - I refactored the database layer to use SQLAlchemy 2.0's new query syntax",
+    "should_trigger": false
+  },
+  {
+    "query": "set up GitHub Actions CI/CD pipeline for our Python project with linting, testing, and deployment",
+    "should_trigger": false
+  },
+  {
+    "query": "read the source code of our auth module and explain the token refresh flow",
+    "should_trigger": false
+  },
+  {
+    "query": "what's the best way to handle database migrations in a microservices architecture?",
+    "should_trigger": false
+  }
+]

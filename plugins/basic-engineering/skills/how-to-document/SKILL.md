@@ -1,6 +1,6 @@
 ---
 name: how-to-document
-description: Load when writing or updating documentation files (README, guides, specs, changelogs).
+description: Project-specific standards for documentation files. Load before creating or editing any .md file (README, guide, design doc, changelog, etc.) — the rules apply regardless of whether the user mentioned documentation style.
 ---
 
 # How to write documentation

@@ -1,6 +1,6 @@
 ---
 name: how-to-annotate-array-shapes
-description: Load when writing code with NDArrays or tensors.
+description: Project-specific rules for annotating array and tensor shapes. Load before writing or editing any Python code that uses NDArray, tensors, or numerical array types.
 ---
 
 # How to annotate array shapes

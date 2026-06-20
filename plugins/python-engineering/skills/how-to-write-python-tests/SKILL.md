@@ -1,6 +1,6 @@
 ---
 name: how-to-write-python-tests
-description: Load when writing Python tests.
+description: Project-specific rules for Python tests — file placement, pytest conventions, mocking approach. Load before writing or editing any Python test file.
 ---
 
 # How to write Python tests

@@ -1,0 +1,74 @@
+[
+  {
+    "query": "\u5e2e\u6211\u7ed9 services/payment.py \u5199\u6d4b\u8bd5\uff0c\u9700\u8981\u6d4b\u8bd5 PaymentProcessor \u7684 charge\u3001refund \u548c void \u65b9\u6cd5\u3002\u7528 pytest\uff0cmock \u6389 Stripe API \u8c03\u7528",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to add tests for the new user registration flow. It involves email validation, password hashing, and database insertion. Where should I put the test file and how should I structure it?",
+    "should_trigger": true
+  },
+  {
+    "query": "write unit tests for the CacheManager class in src/infra/cache.py - test get/set/evict/TTL expiration. Need fixtures for the cache instance setup and teardown",
+    "should_trigger": true
+  },
+  {
+    "query": "\u6211\u7684 test \u6587\u4ef6\u73b0\u5728\u653e\u5728 tests/ \u76ee\u5f55\u4e0b\uff0c\u548c\u6e90\u7801\u5b8c\u5168\u5206\u79bb\u3002\u6bcf\u6b21\u6539\u6587\u4ef6\u90fd\u8981\u5728\u4e24\u4e2a\u76ee\u5f55\u4e4b\u95f4\u8df3\u6765\u8df3\u53bb\uff0c\u6709\u66f4\u597d\u7684\u7ec4\u7ec7\u65b9\u5f0f\u5417\uff1f",
+    "should_trigger": true
+  },
+  {
+    "query": "I want to test a function that calls an external HTTP API. Should I use unittest.mock.patch or is there a better way in pytest? The function is in services/weather.py",
+    "should_trigger": true
+  },
+  {
+    "query": "writing tests for a data processing pipeline - I need to set up test fixtures that create temporary directories with sample CSV files. How should I structure the fixtures?",
+    "should_trigger": true
+  },
+  {
+    "query": "\u5e2e\u6211\u7ed9 models/order.py \u91cc\u7684 Order.calculate_total() \u5199\u6d4b\u8bd5\u3002\u8981\u8986\u76d6\u6b63\u5e38\u6d41\u7a0b\u3001\u6298\u6263\u3001\u514d\u8fd0\u8d39\u3001\u8fb9\u754c\u503c\u8fd9\u4e9b\u573a\u666f",
+    "should_trigger": true
+  },
+  {
+    "query": "I'm testing a private helper function _normalize_address() because it has complex parsing logic. Is this OK, or should I only test through the public API?",
+    "should_trigger": true
+  },
+  {
+    "query": "add test coverage for the database repository layer - we need tests for the CRUD operations but I want to use synthetic data, not connect to a real database",
+    "should_trigger": true
+  },
+  {
+    "query": "write a Python function that validates credit card numbers using the Luhn algorithm",
+    "should_trigger": false
+  },
+  {
+    "query": "add docstrings to the public methods in the OrderService class following Google style",
+    "should_trigger": false
+  },
+  {
+    "query": "\u5e2e\u6211\u628a\u9879\u76ee\u7684\u76ee\u5f55\u7ed3\u6784\u4ece\u5e73\u94fa\u5f0f\u6539\u6210 src layout\uff0c\u8fc1\u79fb\u6240\u6709\u7684 import \u8def\u5f84",
+    "should_trigger": false
+  },
+  {
+    "query": "review the code in my latest PR - I added retry logic to the HTTP client",
+    "should_trigger": false
+  },
+  {
+    "query": "refactor the user service to use dependency injection instead of hardcoded database connections",
+    "should_trigger": false
+  },
+  {
+    "query": "write a Jest test for the React login component that checks if the form validates email and password fields",
+    "should_trigger": false
+  },
+  {
+    "query": "set up pytest in our project with conftest.py and pyproject.toml configuration for test discovery",
+    "should_trigger": false
+  },
+  {
+    "query": "debug why our CI tests are failing intermittently - the error is 'connection refused' on the database fixture",
+    "should_trigger": false
+  },
+  {
+    "query": "\u5e2e\u6211\u628a data_loader.py \u91cc\u7684\u5927\u51fd\u6570\u62c6\u6210\u51e0\u4e2a\u5c0f\u51fd\u6570\uff0c\u6bcf\u4e2a\u53ea\u505a\u4e00\u4ef6\u4e8b",
+    "should_trigger": false
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "query": "I'm starting a new Python project from scratch - a REST API for inventory management. How should I set up the directory structure, package layout, and dependency management?",
+    "should_trigger": true
+  },
+  {
+    "query": "\u5e2e\u6211\u628a\u73b0\u5728\u7684\u5e73\u94fa\u76ee\u5f55\u7ed3\u6784\u91cd\u65b0\u7ec4\u7ec7\u6210 src layout\u3002\u5f53\u524d\u6240\u6709 .py \u6587\u4ef6\u90fd\u5728\u6839\u76ee\u5f55\u4e0b\uff0c\u9700\u8981\u62c6\u6210\u5408\u7406\u7684 package \u548c sub-package",
+    "should_trigger": true
+  },
+  {
+    "query": "my Python project has circular imports between the orders and billing packages. orders.cart imports from billing.pricer and billing.invoice imports from orders.cart. How do I fix this?",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to add a new feature module to our existing Python project. We use src/ layout and I'm not sure whether to create a new top-level package or a sub-package under the existing one",
+    "should_trigger": true
+  },
+  {
+    "query": "\u5e2e\u6211\u914d\u7f6e tach \u6765\u5f3a\u5236 sub-package \u4e4b\u95f4\u7684\u4f9d\u8d56\u5173\u7cfb\u3002\u6211\u4eec\u6709 auth\u3001orders\u3001billing\u3001notifications \u56db\u4e2a sub-package\uff0c\u53ea\u5141\u8bb8\u5355\u5411\u4f9d\u8d56",
+    "should_trigger": true
+  },
+  {
+    "query": "should I use relative or absolute imports in my Python package? I have from .utils import helper in some files and from myproject.utils import helper in others. Which is correct?",
+    "should_trigger": true
+  },
+  {
+    "query": "set up a new Python project using uv with pyproject.toml, development dependencies for testing and linting, and proper package structure for a CLI tool",
+    "should_trigger": true
+  },
+  {
+    "query": "I'm refactoring our project's import structure. We have shared types and constants that are imported by multiple sub-packages. Where should these live?",
+    "should_trigger": true
+  },
+  {
+    "query": "our __init__.py files are getting bloated with re-exports. Some have 50+ import lines. Is this the right pattern or should I restructure?",
+    "should_trigger": true
+  },
+  {
+    "query": "write a Python function that reads a JSON file and returns a parsed dictionary with error handling",
+    "should_trigger": false
+  },
+  {
+    "query": "add type hints to the functions in utils/string_helpers.py - they currently have no annotations",
+    "should_trigger": false
+  },
+  {
+    "query": "\u5e2e\u6211\u7ed9 TransformPipeline \u7c7b\u5199 docstring\uff0c\u8bf4\u660e\u6bcf\u4e2a\u65b9\u6cd5\u7684\u7528\u9014\u548c\u53c2\u6570",
+    "should_trigger": false
+  },
+  {
+    "query": "review my PR - I changed the database schema and added new migration scripts",
+    "should_trigger": false
+  },
+  {
+    "query": "write pytest tests for the authentication middleware covering valid tokens, expired tokens, and malformed tokens",
+    "should_trigger": false
+  },
+  {
+    "query": "create a Dockerfile for our Python API that uses multi-stage builds",
+    "should_trigger": false
+  },
+  {
+    "query": "how do I organize elements within a Python module? Like should public functions come before private ones?",
+    "should_trigger": false
+  },
+  {
+    "query": "set up GitHub Actions CI pipeline for running tests and linting on every PR",
+    "should_trigger": false
+  },
+  {
+    "query": "fix the bug in our payment processing - the discount calculation is wrong when multiple coupons are applied",
+    "should_trigger": false
+  }
+]

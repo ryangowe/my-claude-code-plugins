@@ -1,6 +1,6 @@
 ---
 name: how-to-write-pythonic-code
-description: Load whenever writing any Python code.
+description: Project-specific Python code style and idiom rules. Load before writing or editing any Python code.
 ---
 
 # How to write Pythonic code

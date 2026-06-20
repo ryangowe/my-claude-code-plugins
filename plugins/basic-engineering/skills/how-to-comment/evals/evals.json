@@ -1,0 +1,78 @@
+[
+  {
+    "query": "I'm writing a new Python module for our payment service - it needs a PaymentProcessor class, some helper functions, constants for supported currencies, and private validation logic.",
+    "should_trigger": true
+  },
+  {
+    "query": "\u5e2e\u6211\u5b9e\u73b0\u4e00\u4e2a LRU cache\uff0c\u7528 Python \u7684 OrderedDict\u3002\u9700\u8981 get\u3001put\u3001evict \u65b9\u6cd5\uff0c\u652f\u6301 max_size \u53c2\u6570",
+    "should_trigger": true
+  },
+  {
+    "query": "write a FastAPI endpoint that accepts a CSV upload, validates the columns, processes each row through our pricing engine, and returns a summary JSON response",
+    "should_trigger": true
+  },
+  {
+    "query": "fix the race condition in src/workers/task_queue.py - when two workers pick up the same job, the second one overwrites the first's result. Need to add proper locking",
+    "should_trigger": true
+  },
+  {
+    "query": "\u5e2e\u6211\u91cd\u6784 data_loader.py\uff0c\u628a\u90a3\u4e2a 200 \u884c\u7684 load_and_transform \u51fd\u6570\u62c6\u6210\u51e0\u4e2a\u5c0f\u51fd\u6570\uff0c\u6bcf\u4e2a\u8d1f\u8d23\u4e00\u4e2a stage",
+    "should_trigger": true
+  },
+  {
+    "query": "add a retry mechanism to the HTTP client in services/api_client.py with exponential backoff. Currently it just fails on the first timeout",
+    "should_trigger": true
+  },
+  {
+    "query": "implement a TypeScript React component for a searchable dropdown with debounced input, keyboard navigation, and async option loading from our API",
+    "should_trigger": true
+  },
+  {
+    "query": "\u5e2e\u6211\u5199\u4e00\u4e2a Rust \u7684 CLI \u5de5\u5177\uff0c\u8bfb\u53d6 stdin \u7684 JSON lines\uff0c\u6309\u6307\u5b9a\u5b57\u6bb5 group by\uff0c\u8f93\u51fa\u6bcf\u7ec4\u7684 count \u548c sum",
+    "should_trigger": true
+  },
+  {
+    "query": "refactor the user authentication flow in auth/session.py to support both JWT and session-based auth. The current code only handles JWT",
+    "should_trigger": true
+  },
+  {
+    "query": "create a Go HTTP middleware that rate-limits requests by IP using a token bucket algorithm. Needs to handle concurrent access safely",
+    "should_trigger": true
+  },
+  {
+    "query": "what's the difference between asyncio.gather and asyncio.wait? When should I use which?",
+    "should_trigger": false
+  },
+  {
+    "query": "read src/models/order.py and explain what the calculate_total method does, step by step",
+    "should_trigger": false
+  },
+  {
+    "query": "run pytest -v tests/ and tell me which tests are failing and why",
+    "should_trigger": false
+  },
+  {
+    "query": "what database should I use for storing time-series sensor data? Compare PostgreSQL with TimescaleDB vs InfluxDB",
+    "should_trigger": false
+  },
+  {
+    "query": "update the README.md to include the new API endpoints and add a quickstart guide",
+    "should_trigger": false
+  },
+  {
+    "query": "list all the TODO comments in the codebase and group them by priority",
+    "should_trigger": false
+  },
+  {
+    "query": "\u5e2e\u6211\u770b\u770b CI \u4e3a\u4ec0\u4e48\u6302\u4e86\uff0c\u6700\u8fd1\u4e00\u6b21 GitHub Actions \u7684 log \u663e\u793a test_integration \u5931\u8d25",
+    "should_trigger": false
+  },
+  {
+    "query": "compare our current docker-compose.yml with the production k8s deployment and check for config drift",
+    "should_trigger": false
+  },
+  {
+    "query": "git log --oneline the last 20 commits and summarize what changed this sprint",
+    "should_trigger": false
+  }
+]

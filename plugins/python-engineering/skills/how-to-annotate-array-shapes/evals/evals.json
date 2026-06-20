@@ -1,0 +1,74 @@
+[
+  {
+    "query": "I'm writing a point cloud processing function that takes arrays of XYZ coordinates and RGB colors. Need to add proper shape annotations - the inputs are (N,3) positions and (N,3) colors and the output is (N,6) combined features",
+    "should_trigger": true
+  },
+  {
+    "query": "\u5e2e\u6211\u7ed9\u8fd9\u4e2a attention mechanism \u7684\u5b9e\u73b0\u52a0\u4e0a shape \u6ce8\u91ca\u3002\u8f93\u5165\u662f queries [B,T,D] \u548c keys [B,T,D]\uff0c\u4e2d\u95f4\u6709 transpose \u548c matmul\uff0c\u6700\u540e\u8f93\u51fa [B,T,T] \u7684 scores",
+    "should_trigger": true
+  },
+  {
+    "query": "I have a function that does batched matrix operations on NDArrays - input is (B, N, 3) and I do several reshapes and broadcasts. The intermediate shapes are confusing, can you help me annotate them properly?",
+    "should_trigger": true
+  },
+  {
+    "query": "writing a custom PyTorch dataset that yields image tensors of shape (C, H, W) and label tensors of shape (num_classes,). How should I document these shapes in the docstring?",
+    "should_trigger": true
+  },
+  {
+    "query": "\u6211\u5728\u5199\u4e00\u4e2a numpy \u51fd\u6570\u5904\u7406\u4f20\u611f\u5668\u6570\u636e\uff0c\u8f93\u5165\u662f timestamps [N] \u548c measurements [N, K] \uff08K \u4e2a\u4f20\u611f\u5668\uff09\uff0c\u8f93\u51fa\u662f interpolated [M, K]\u3002\u600e\u4e48\u5728 docstring \u91cc\u6807\u6ce8\u8fd9\u4e9b shape\uff1f",
+    "should_trigger": true
+  },
+  {
+    "query": "help me document this image processing pipeline - we have a batch of images [B,H,W,C] that go through several convolution-like operations with shape changes at each step. I want inline comments showing the shape after each operation",
+    "should_trigger": true
+  },
+  {
+    "query": "I'm writing a class that stores trajectory data with positions [N,3], velocities [N,3], and timestamps [N]. Multiple properties share the N dimension. How should I document the shared dimension across the class?",
+    "should_trigger": true
+  },
+  {
+    "query": "need to add type hints and shape documentation to our feature extraction module. Functions take variable-length sequences of embeddings (NDArray) and return fixed-size feature vectors",
+    "should_trigger": true
+  },
+  {
+    "query": "\u5e2e\u6211\u7ed9\u8fd9\u4e2a KNN \u641c\u7d22\u51fd\u6570\u5199 docstring\uff0c\u5b83\u63a5\u53d7 query_points [Q,3] \u548c reference_points [R,3]\uff0c\u8fd4\u56de distances [Q,K] \u548c indices [Q,K]",
+    "should_trigger": true
+  },
+  {
+    "query": "write a function that sorts a list of dictionaries by a given key and returns the sorted list",
+    "should_trigger": false
+  },
+  {
+    "query": "\u5e2e\u6211\u5199\u4e00\u4e2a REST API endpoint\uff0c\u63a5\u6536 JSON payload \u5e76\u5b58\u5230 PostgreSQL \u6570\u636e\u5e93",
+    "should_trigger": false
+  },
+  {
+    "query": "add docstrings to the UserService class - it has methods for CRUD operations on user records stored in SQLAlchemy models",
+    "should_trigger": false
+  },
+  {
+    "query": "write unit tests for the data validation module that checks if input CSV files have the correct column types",
+    "should_trigger": false
+  },
+  {
+    "query": "refactor the config parser to use pydantic models instead of raw dictionaries for type safety",
+    "should_trigger": false
+  },
+  {
+    "query": "I need to process a list of 2D coordinates and find the convex hull. Just write the algorithm, don't worry about documentation",
+    "should_trigger": false
+  },
+  {
+    "query": "create a CLI tool that reads numpy .npy files and prints basic statistics (mean, std, min, max). Keep it simple",
+    "should_trigger": false
+  },
+  {
+    "query": "\u5e2e\u6211\u4f18\u5316\u8fd9\u4e2a pandas DataFrame \u64cd\u4f5c\u7684\u6027\u80fd\uff0c\u5f53\u524d\u5904\u7406 100 \u4e07\u884c\u6570\u636e\u9700\u8981 30 \u79d2",
+    "should_trigger": false
+  },
+  {
+    "query": "write a Python script that downloads images from URLs in a CSV file and saves them to a local directory with progress bar",
+    "should_trigger": false
+  }
+]

@@ -1,6 +1,6 @@
 ---
 name: how-to-comment
-description: Load when writing comments or docstrings in code.
+description: Project-specific coding standards for comments and docstrings. Load before writing or editing any code file — the rules apply regardless of whether the user mentioned comments.
 ---
 
 # How to comment code

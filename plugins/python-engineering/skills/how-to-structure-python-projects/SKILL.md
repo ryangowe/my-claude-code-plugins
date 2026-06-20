@@ -1,6 +1,6 @@
 ---
 name: how-to-structure-python-projects
-description: Load when creating a Python project or working with its packages, modules, or imports.
+description: Project-specific rules for Python project layout, package hierarchy, imports, and dependency management. Load before creating a Python project, adding or moving modules, or fixing import issues.
 ---
 
 # How to structure Python projects

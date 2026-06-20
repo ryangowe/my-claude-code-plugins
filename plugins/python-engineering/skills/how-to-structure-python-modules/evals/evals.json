@@ -1,0 +1,74 @@
+[
+  {
+    "query": "I'm writing a new Python module for our payment service - it needs a PaymentProcessor class, some helper functions, constants for supported currencies, and private validation logic. How should I organize everything within the file?",
+    "should_trigger": true
+  },
+  {
+    "query": "\u5e2e\u6211\u6574\u7406\u4e00\u4e0b services/order_manager.py \u7684\u4ee3\u7801\u987a\u5e8f\uff0c\u73b0\u5728 private \u51fd\u6570\u6563\u843d\u5728 public \u51fd\u6570\u4e2d\u95f4\uff0c\u8fd8\u6709\u4e9b\u5e38\u91cf\u5b9a\u4e49\u5728\u6587\u4ef6\u6700\u5e95\u90e8\uff0c\u8bfb\u8d77\u6765\u5f88\u6df7\u4e71",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to create a new Python file that exposes a public API with 3 functions and 2 classes. There are also several internal helper functions. What's the right ordering within the module?",
+    "should_trigger": true
+  },
+  {
+    "query": "my module has a public function that returns a _PrivateClass instance, but _PrivateClass is defined after the function. Python can't resolve the forward reference in the type hint. How do I handle this?",
+    "should_trigger": true
+  },
+  {
+    "query": "\u5e2e\u6211\u8bbe\u8ba1 src/analytics/metrics.py \u7684\u7ed3\u6784\uff1a\u6709 MetricsCollector \u7c7b\uff08public\uff09\u3001\u51e0\u4e2a metric \u8ba1\u7b97\u51fd\u6570\uff08public\uff09\u3001\u4e00\u4e9b\u5185\u90e8\u7684\u805a\u5408\u8f85\u52a9\u51fd\u6570\u3001\u548c\u4e00\u5806\u5e38\u91cf\u3002\u7c7b\u5185\u90e8\u7684\u65b9\u6cd5\u6392\u5217\u4e5f\u9700\u8981\u89c4\u8303\u4e00\u4e0b",
+    "should_trigger": true
+  },
+  {
+    "query": "I have a Python class with __init__, several public methods, some @staticmethod helpers, __repr__, __eq__, and private methods. What order should these go in within the class body?",
+    "should_trigger": true
+  },
+  {
+    "query": "where should I put this constant MAX_RETRIES = 3? It's only used in the retry_request() function, but I've seen people put all constants at the top of the module",
+    "should_trigger": true
+  },
+  {
+    "query": "I'm creating a new utility module and I have both public and private functions. Should private functions go right after the public ones that use them, or all at the end?",
+    "should_trigger": true
+  },
+  {
+    "query": "writing a new FastAPI router file - it has route handlers, pydantic models, dependency injection functions, and some private helpers. How should I structure this module?",
+    "should_trigger": true
+  },
+  {
+    "query": "how should I organize my Python project's package structure? I have models, services, routes, and utils - should each be its own package?",
+    "should_trigger": true
+  },
+  {
+    "query": "write a function that parses a TOML config file and returns a validated Settings object using pydantic",
+    "should_trigger": true
+  },
+  {
+    "query": "add Google-style docstrings to all public functions in the data_processing module",
+    "should_trigger": false
+  },
+  {
+    "query": "\u5e2e\u6211\u5199 pytest \u6d4b\u8bd5\u7528\u4f8b\u8986\u76d6 UserRepository \u7c7b\u7684 CRUD \u64cd\u4f5c",
+    "should_trigger": false
+  },
+  {
+    "query": "set up a new Python project with uv, create the directory structure, and configure pyproject.toml",
+    "should_trigger": true
+  },
+  {
+    "query": "refactor this function to use list comprehension instead of a for loop with append",
+    "should_trigger": false
+  },
+  {
+    "query": "review the changes in my PR - I added a new caching module with Redis integration",
+    "should_trigger": true
+  },
+  {
+    "query": "fix the import error in main.py - it says 'cannot import name ProcessingEngine from services'",
+    "should_trigger": false
+  },
+  {
+    "query": "\u5e2e\u6211\u628a\u8fd9\u4e2a 500 \u884c\u7684 utils.py \u62c6\u6210\u591a\u4e2a\u6a21\u5757\uff0c\u6309\u529f\u80fd\u5206\u7ec4",
+    "should_trigger": true
+  }
+]

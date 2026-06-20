@@ -1,0 +1,78 @@
+[
+  {
+    "query": "\u5e2e\u6211\u5199\u4e00\u4e2a Python \u51fd\u6570\u5904\u7406\u914d\u7f6e\u6587\u4ef6\u5408\u5e76\uff1abase config \u548c override config \u90fd\u662f\u5d4c\u5957 dict\uff0c\u9700\u8981\u6df1\u5ea6\u5408\u5e76\uff0coverride \u4f18\u5148",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to write a Python class that manages database connections with proper context manager support (__enter__/__exit__), connection pooling, and automatic retry on failure",
+    "should_trigger": true
+  },
+  {
+    "query": "write a data processing pipeline in Python that reads CSV files, filters rows by date range, groups by category, and outputs summary statistics. Should handle missing values gracefully",
+    "should_trigger": true
+  },
+  {
+    "query": "\u5e2e\u6211\u5b9e\u73b0\u4e00\u4e2a Python \u7684 LRU cache decorator\uff0c\u7c7b\u4f3c functools.lru_cache \u4f46\u652f\u6301 TTL \u8fc7\u671f\u3002\u9700\u8981\u7528\u5230 dataclasses \u548c proper dunder methods",
+    "should_trigger": true
+  },
+  {
+    "query": "I have this Python code that uses a lot of if/elif chains to handle different message types. Each branch does similar processing. How can I refactor this to be more Pythonic?",
+    "should_trigger": true
+  },
+  {
+    "query": "write a Python function that takes a list of user dicts, filters out inactive ones, extracts their email addresses, and returns them sorted. Currently using nested for loops with manual list building",
+    "should_trigger": true
+  },
+  {
+    "query": "I'm implementing error handling for a file processing service in Python. Need to handle FileNotFoundError, PermissionError, and corrupt file cases. Should I use LBYL or EAFP pattern?",
+    "should_trigger": true
+  },
+  {
+    "query": "\u5e2e\u6211\u7528 Python \u5199\u4e00\u4e2a CLI \u5de5\u5177\uff0c\u89e3\u6790\u547d\u4ee4\u884c\u53c2\u6570\uff0c\u8bfb\u53d6 TOML \u914d\u7f6e\uff0c\u6267\u884c\u51e0\u79cd\u4e0d\u540c\u7684\u5b50\u547d\u4ee4\u3002\u4ee3\u7801\u8981\u89c4\u8303\u548c pythonic",
+    "should_trigger": true
+  },
+  {
+    "query": "refactor this Python function - it has 4 levels of nesting with if/for/try blocks. I know there's a cleaner way to write this using guard clauses and early returns",
+    "should_trigger": true
+  },
+  {
+    "query": "write a REST API endpoint using FastAPI that accepts a file upload and returns analysis results as JSON",
+    "should_trigger": true
+  },
+  {
+    "query": "update the README.md with the new deployment instructions and add a troubleshooting section",
+    "should_trigger": false
+  },
+  {
+    "query": "review my PR for security issues - I modified the authentication middleware",
+    "should_trigger": false
+  },
+  {
+    "query": "write Jest tests for the React dashboard component",
+    "should_trigger": false
+  },
+  {
+    "query": "create a Dockerfile for our Go microservice with multi-stage builds",
+    "should_trigger": false
+  },
+  {
+    "query": "\u5e2e\u6211\u5199\u4e00\u4e2a TypeScript \u7684\u8868\u5355\u9a8c\u8bc1\u5668\uff0c\u652f\u6301 email\u3001phone\u3001\u548c\u81ea\u5b9a\u4e49 regex \u89c4\u5219",
+    "should_trigger": false
+  },
+  {
+    "query": "fix the SQL query in reports/monthly.sql - it's not correctly joining the orders and payments tables",
+    "should_trigger": false
+  },
+  {
+    "query": "set up GitHub Actions workflow for our Rust project with cargo test and clippy",
+    "should_trigger": false
+  },
+  {
+    "query": "write a shell script that backs up the PostgreSQL database to S3 with compression and rotation",
+    "should_trigger": false
+  },
+  {
+    "query": "how should I organize my Python package with src/ layout and proper sub-packages?",
+    "should_trigger": false
+  }
+]
