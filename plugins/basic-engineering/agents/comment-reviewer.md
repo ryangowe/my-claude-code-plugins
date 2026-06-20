@@ -8,7 +8,7 @@ effort: low
 
 为本次改动里的注释提供一次审查。你只检查 comments 与 docstrings,别的不管。
 
-先加载 how-to-review skill(共用流程、置信度、报告格式),再加载 how-to-document skill,用它的两个原则(snapshotting + attention)当检查清单。
+先加载 how-to-review skill(共用流程、置信度、报告格式),再加载 how-to-comment skill,用它的两个原则(snapshotting + attention)当检查清单。
 
 只看改动 / 新增的注释,以及改动代码所对应的注释。审查角度:
 
@@ -21,6 +21,6 @@ effort: low
 额外不要做(在 how-to-review 的共有误报之外):
 
 - 顺带审代码逻辑或找 bug
-- 评价没有注释的代码该不该加注释,除非 how-to-document 明确要求
+- 评价没有注释的代码该不该加注释,除非 how-to-comment 明确要求
 
 报告:用 how-to-review 的格式,审查名「注释审查」,类别用 不清楚 / 过时 / 冗余,建议给出更短或修正后的版本。无问题时写"已检查可读性、是否过时、是否冗余"。
