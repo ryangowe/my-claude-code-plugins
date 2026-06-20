@@ -100,5 +100,8 @@ htmlcov/
 # pyenv
 # .python-version
 
+### Node.js
+node_modules/
+
 ### Local working files
 CLAUDE.md

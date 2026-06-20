@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "uv run --no-project python \"${CLAUDE_PLUGIN_ROOT}/scripts/verify_urls.py\""
+            "command": "npx tsx \"${CLAUDE_PLUGIN_ROOT}/scripts/verify-urls.ts\""
           }
         ]
       },
@@ -13,7 +13,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "uv run --no-project --with jieba python \"${CLAUDE_PLUGIN_ROOT}/scripts/detect_hedging.py\""
+            "command": "npx tsx \"${CLAUDE_PLUGIN_ROOT}/scripts/detect-hedging.ts\""
           }
         ]
       }
