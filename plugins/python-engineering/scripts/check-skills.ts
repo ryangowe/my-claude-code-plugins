@@ -16,21 +16,51 @@ interface TranscriptEntry {
 
 const TEST_FILE = /[/\\](test_[^/\\]+\.py|[^/\\]+_test\.py)$/;
 
+interface SkillRule {
+  // Phrased to read after "load the skill ..." in the SessionStart hint.
+  trigger: string;
+  applies(toolName: string, file: string): boolean;
+  // Loading any one member satisfies the rule.
+  skills: string[];
+}
+
+const isPy = (file: string): boolean => file.endsWith('.py');
+
+// Single source for both the PreToolUse block and the SessionStart hint.
+const RULES: SkillRule[] = [
+  {
+    trigger: 'before you Write a new .py file',
+    applies: (tool, file) => tool === 'Write' && isPy(file),
+    skills: ['how-to-structure-python-modules', 'how-to-structure-python-projects'],
+  },
+  {
+    trigger: 'before you Edit a .py file',
+    applies: (tool, file) => tool === 'Edit' && isPy(file),
+    skills: ['how-to-write-pythonic-code'],
+  },
+  {
+    trigger: 'before you Edit a Python test file (test_*.py or *_test.py)',
+    applies: (tool, file) => tool === 'Edit' && isPy(file) && TEST_FILE.test(file),
+    skills: ['how-to-write-python-tests'],
+  },
+];
+
 export function requiredSkills(input: HookInput): string[][] {
   const file = input.tool_input.file_path ?? '';
-  if (!file.endsWith('.py')) return [];
+  return RULES.filter(r => r.applies(input.tool_name, file)).map(r => r.skills);
+}
 
-  if (input.tool_name === 'Write') {
-    return [['how-to-structure-python-modules', 'how-to-structure-python-projects']];
-  }
-
-  if (input.tool_name !== 'Edit') return [];
-
-  const groups: string[][] = [['how-to-write-pythonic-code']];
-  if (TEST_FILE.test(file)) {
-    groups.push(['how-to-write-python-tests']);
-  }
-  return groups;
+export function sessionStartContext(): string {
+  const rules = RULES
+    .map(r => `- ${r.trigger}, first load: ${r.skills.join(' or ')}`)
+    .join('\n');
+  return [
+    'A skill shapes your work only if it is loaded while you plan, not after an edit is blocked.',
+    'Load the matching skill with the Skill tool as soon as you know you will touch such a file:',
+    rules,
+    'Use the Skill tool (not Read on SKILL.md) so the load is recorded. A PreToolUse hook blocks',
+    'the edit otherwise; loading early avoids that round-trip and lets the guidance reach your design.',
+  ].join('\n');
 }
 
 export function loadedSkills(transcriptPath: string): Set<string> {

@@ -23,16 +23,51 @@ const CODE_EXTS = new Set([
   '.vue', '.svelte',
 ]);
 
-export function requiredSkills(input: HookInput): string[][] {
-  if (input.tool_name !== 'Edit' && input.tool_name !== 'Write') return [];
-  const file = input.tool_input.file_path ?? '';
+const isEditOrWrite = (tool: string): boolean => tool === 'Edit' || tool === 'Write';
 
-  if (file.endsWith('.md')) return [['how-to-document']];
-
+function isCodeFile(file: string): boolean {
   const dot = file.lastIndexOf('.');
-  if (dot >= 0 && CODE_EXTS.has(file.slice(dot))) return [['how-to-comment']];
+  return dot >= 0 && CODE_EXTS.has(file.slice(dot));
+}
 
-  return [];
+interface SkillRule {
+  // Phrased to read after "load the skill ..." in the SessionStart hint.
+  trigger: string;
+  applies(toolName: string, file: string): boolean;
+  // Loading any one member satisfies the rule.
+  skills: string[];
+}
+
+// Single source for both the PreToolUse block and the SessionStart hint.
+const RULES: SkillRule[] = [
+  {
+    trigger: 'before you Edit or Write a Markdown (.md) file',
+    applies: (tool, file) => isEditOrWrite(tool) && file.endsWith('.md'),
+    skills: ['how-to-document'],
+  },
+  {
+    trigger: 'before you Edit or Write a code file',
+    applies: (tool, file) => isEditOrWrite(tool) && isCodeFile(file),
+    skills: ['how-to-comment'],
+  },
+];
+
+export function requiredSkills(input: HookInput): string[][] {
+  const file = input.tool_input.file_path ?? '';
+  return RULES.filter(r => r.applies(input.tool_name, file)).map(r => r.skills);
+}
+
+export function sessionStartContext(): string {
+  const rules = RULES
+    .map(r => `- ${r.trigger}, first load: ${r.skills.join(' or ')}`)
+    .join('\n');
+  return [
+    'A skill shapes your work only if it is loaded while you plan, not after an edit is blocked.',
+    'Load the matching skill with the Skill tool as soon as you know you will touch such a file:',
+    rules,
+    'Use the Skill tool (not Read on SKILL.md) so the load is recorded. A PreToolUse hook blocks',
+    'the edit otherwise; loading early avoids that round-trip and lets the guidance reach your design.',
+  ].join('\n');
 }
 
 export function loadedSkills(transcriptPath: string): Set<string> {

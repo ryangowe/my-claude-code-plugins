@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as os from 'node:os';
-import { requiredSkills, loadedSkills, missingSkills } from './check-skills.js';
+import { requiredSkills, loadedSkills, missingSkills, sessionStartContext } from './check-skills.js';
 
 let tmpDir: string;
 
@@ -77,6 +77,22 @@ describe('requiredSkills', () => {
     expect(requiredSkills({
       tool_name: 'Write', tool_input: { file_path: '/tests/test_new.py' }, transcript_path: '',
     })).toEqual([['how-to-structure-python-modules', 'how-to-structure-python-projects']]);
+  });
+});
+
+// -- sessionStartContext ------------------------------------------------------
+
+describe('sessionStartContext', () => {
+  it('names every required skill so the hint covers all rules', () => {
+    const ctx = sessionStartContext();
+    expect(ctx).toContain('how-to-write-pythonic-code');
+    expect(ctx).toContain('how-to-write-python-tests');
+    expect(ctx).toContain('how-to-structure-python-modules');
+    expect(ctx).toContain('how-to-structure-python-projects');
+  });
+
+  it('directs loading through the Skill tool, not Read', () => {
+    expect(sessionStartContext()).toContain('Skill tool');
   });
 });
 

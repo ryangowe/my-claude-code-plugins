@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as os from 'node:os';
-import { requiredSkills, loadedSkills, missingSkills } from './check-skills.js';
+import { requiredSkills, loadedSkills, missingSkills, sessionStartContext } from './check-skills.js';
 
 let tmpDir: string;
 
@@ -73,6 +73,20 @@ describe('requiredSkills', () => {
     expect(requiredSkills({
       tool_name: 'Edit', tool_input: { file_path: '/foo/Makefile' }, transcript_path: '',
     })).toEqual([]);
+  });
+});
+
+// -- sessionStartContext ------------------------------------------------------
+
+describe('sessionStartContext', () => {
+  it('names every required skill so the hint covers all rules', () => {
+    const ctx = sessionStartContext();
+    expect(ctx).toContain('how-to-document');
+    expect(ctx).toContain('how-to-comment');
+  });
+
+  it('directs loading through the Skill tool, not Read', () => {
+    expect(sessionStartContext()).toContain('Skill tool');
   });
 });
 
