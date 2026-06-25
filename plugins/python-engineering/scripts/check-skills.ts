@@ -1,10 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { resolve, relative, isAbsolute } from 'node:path';
 
 interface HookInput {
   tool_name: string;
   tool_input: { file_path?: string };
   transcript_path: string;
+  cwd?: string;
 }
 
 interface TranscriptEntry {
@@ -48,6 +50,13 @@ const RULES: SkillRule[] = [
 export function requiredSkills(input: HookInput): string[][] {
   const file = input.tool_input.file_path ?? '';
   return RULES.filter(r => r.applies(input.tool_name, file)).map(r => r.skills);
+}
+
+// The how-to skills govern only the active project; an Edit/Write reaching out to
+// global config, scratchpad, or a sibling repo must not be blocked.
+export function isInsideRepo(file: string, root: string): boolean {
+  const rel = relative(resolve(root), resolve(file));
+  return rel !== '' && !rel.startsWith('..') && !isAbsolute(rel);
 }
 
 export function sessionStartContext(): string {
@@ -106,6 +115,10 @@ async function main(): Promise<void> {
   const input: HookInput = JSON.parse(await readStdin());
   const required = requiredSkills(input);
   if (required.length === 0) return;
+
+  // Without a known root the enforcement stays on as the deterministic backstop.
+  const root = process.env.CLAUDE_PROJECT_DIR ?? input.cwd;
+  if (root && !isInsideRepo(input.tool_input.file_path ?? '', root)) return;
 
   const missing = missingSkills(required, loadedSkills(input.transcript_path));
   if (missing.length === 0) return;

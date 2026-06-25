@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as os from 'node:os';
-import { requiredSkills, loadedSkills, missingSkills, sessionStartContext } from './check-skills.js';
+import { requiredSkills, loadedSkills, missingSkills, sessionStartContext, isInsideRepo } from './check-skills.js';
 
 let tmpDir: string;
 
@@ -93,6 +93,38 @@ describe('sessionStartContext', () => {
 
   it('directs loading through the Skill tool, not Read', () => {
     expect(sessionStartContext()).toContain('Skill tool');
+  });
+});
+
+// -- isInsideRepo -------------------------------------------------------------
+
+describe('isInsideRepo', () => {
+  it('accepts a file nested under the repo root', () => {
+    expect(isInsideRepo('/repo/src/main.py', '/repo')).toBe(true);
+  });
+
+  it('accepts a file directly in the repo root', () => {
+    expect(isInsideRepo('/repo/conftest.py', '/repo')).toBe(true);
+  });
+
+  it('rejects a file in a sibling repo', () => {
+    expect(isInsideRepo('/other/main.py', '/repo')).toBe(false);
+  });
+
+  it('rejects a sibling whose path shares the root prefix', () => {
+    expect(isInsideRepo('/repo-other/main.py', '/repo')).toBe(false);
+  });
+
+  it('rejects a file above the repo root', () => {
+    expect(isInsideRepo('/repo/../secret.py', '/repo')).toBe(false);
+  });
+
+  it('rejects the root itself', () => {
+    expect(isInsideRepo('/repo', '/repo')).toBe(false);
+  });
+
+  it('normalizes traversal that stays inside the repo', () => {
+    expect(isInsideRepo('/repo/src/../lib/x.py', '/repo')).toBe(true);
   });
 });
 
