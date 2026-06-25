@@ -16,7 +16,7 @@ const GUARDED_EXTS = new Set([
 ]);
 
 const CONTENT_WRITE_PATTERNS: RegExp[] = [
-  /(?:^|[^2&])>/,   // redirect (excluding stderr 2> and &>)
+  /(?:^|[^2&=-])>/,   // redirect; excludes stderr 2>, &>, and arrows -> =>
   /\btee\b/,
   /\bsed\s.*-i/,
   /\bperl\s.*-\w*i/,
@@ -42,10 +42,29 @@ export function hasContentWrite(command: string): boolean {
   return CONTENT_WRITE_PATTERNS.some(p => p.test(command));
 }
 
+const HEREDOC_OPEN = /<<-?\s*(['"]?)([A-Za-z_]\w*)\1/g;
+
+// Drop heredoc bodies; they are stdin data, not shell. A real write redirect
+// always sits on the opening line (`cat > f.ts <<EOF`), which is kept, so this
+// never hides one — it only stops body text like a commit message from matching.
+export function stripHeredocs(command: string): string {
+  const kept: string[] = [];
+  const pending: string[] = [];   // delimiters awaiting their closing line, in order
+  for (const line of command.split('\n')) {
+    if (pending.length > 0) {
+      if (line.trim() === pending[0]) pending.shift();
+      continue;
+    }
+    kept.push(line);
+    for (const m of line.matchAll(HEREDOC_OPEN)) pending.push(m[2]);
+  }
+  return kept.join('\n');
+}
+
 export function shouldBlock(command: string): boolean {
-  const trimmed = command.trim();
-  if (trimmed === '') return false;
-  return hasContentWrite(trimmed) && hasGuardedFile(trimmed);
+  const analyzed = stripHeredocs(command).trim();
+  if (analyzed === '') return false;
+  return hasContentWrite(analyzed) && hasGuardedFile(analyzed);
 }
 
 export function checkBashWrite(input: HookInput): { blocked: boolean; command: string } {

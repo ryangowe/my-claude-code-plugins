@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { hasGuardedFile, hasContentWrite, shouldBlock, checkBashWrite } from './block-bash-write.js';
+import { hasGuardedFile, hasContentWrite, shouldBlock, stripHeredocs, checkBashWrite } from './block-bash-write.js';
 
 // -- hasGuardedFile -----------------------------------------------------------
 
@@ -31,6 +31,23 @@ describe('hasContentWrite', () => {
   it('ignores &>', () => expect(hasContentWrite('cmd &> /dev/null')).toBe(false));
   it('ignores plain read', () => expect(hasContentWrite('cat file')).toBe(false));
   it('ignores grep', () => expect(hasContentWrite('grep pattern file')).toBe(false));
+  it('ignores -> arrow', () => expect(hasContentWrite('spans(splits) -> list[ClipSpan]')).toBe(false));
+  it('ignores => arrow', () => expect(hasContentWrite('const f = () => x')).toBe(false));
+});
+
+// -- stripHeredocs ------------------------------------------------------------
+
+describe('stripHeredocs', () => {
+  it('drops the body, keeps the opening line', () =>
+    expect(stripHeredocs("git commit -F - <<'EOF'\nfix records.py: a -> b\nEOF")).toBe(
+      "git commit -F - <<'EOF'",
+    ));
+  it('keeps a redirect on the opening line', () =>
+    expect(stripHeredocs("cat > f.ts <<'EOF'\ncode\nEOF")).toBe("cat > f.ts <<'EOF'"));
+  it('leaves command without heredoc untouched', () =>
+    expect(stripHeredocs('echo hi > out.txt')).toBe('echo hi > out.txt'));
+  it('handles unquoted and indented delimiters', () =>
+    expect(stripHeredocs('cmd <<-END\nbody\n\tEND\nrest')).toBe('cmd <<-END\nrest'));
 });
 
 // -- shouldBlock (integration) ------------------------------------------------
@@ -84,6 +101,12 @@ describe('shouldBlock', () => {
       expect(shouldBlock('wc -l main.py')).toBe(false));
     it('stderr redirect with .ts arg', () =>
       expect(shouldBlock('npx tsx script.ts 2> /dev/null')).toBe(false));
+    it('git commit heredoc mentioning .py and arrows', () =>
+      expect(shouldBlock(
+        "git commit -F - <<'EOF'\nrefactor: spans(splits) -> list; delete records.py\nEOF",
+      )).toBe(false));
+    it('git commit -m mentioning .py and an arrow', () =>
+      expect(shouldBlock('git commit -m "spans -> list in records.py"')).toBe(false));
   });
 });
 
